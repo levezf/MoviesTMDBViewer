@@ -1,4 +1,4 @@
 package com.levez.d2u.moviestmdbviewer.Models.entity;
 
-public class Artist {
+public abstract class Searchable {
 }

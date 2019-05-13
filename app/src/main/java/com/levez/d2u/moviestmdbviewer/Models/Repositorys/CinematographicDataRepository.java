@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
-import com.levez.d2u.moviestmdbviewer.Models.api.responses.CinematographicResponse;
+import com.levez.d2u.moviestmdbviewer.Models.api.responses.BaseResponse;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Genre;
 import com.levez.d2u.moviestmdbviewer.Models.entity.MutableListMap;
@@ -45,7 +45,7 @@ public abstract class CinematographicDataRepository<T extends Cinematographic> e
 
 /*
 
-    MutableLiveData<List<T>> getCinematographic(Observable<CinematographicResponse<T>> observable,
+    MutableLiveData<List<T>> getCinematographic(Observable<BaseResponse<T>> observable,
                                                 final MutableListMap<T> mutableListMap) {
 
         mutableListMap.createNewList();
@@ -54,7 +54,7 @@ public abstract class CinematographicDataRepository<T extends Cinematographic> e
                 observable
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .flatMap((Function<CinematographicResponse<T>, Observable<T>>) cinematographicResponse ->
+                        .flatMap((Function<BaseResponse<T>, Observable<T>>) cinematographicResponse ->
 
                                 Observable.create(emitter -> {
                             try {
@@ -92,7 +92,7 @@ public abstract class CinematographicDataRepository<T extends Cinematographic> e
 */
 
 
-    MutableLiveData<List<T>> getCinematographic(Observable<CinematographicResponse<T>> observable,
+    MutableLiveData<List<T>> getCinematographic(Observable<BaseResponse<T>> observable,
                                       final MutableListMap<T> mutableListMap) {
 
         mutableListMap.createNewList();
@@ -101,11 +101,11 @@ public abstract class CinematographicDataRepository<T extends Cinematographic> e
                 observable
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .flatMap((Function<CinematographicResponse<T>, Observable<T>>) cinematographicResponse ->
+                        .flatMap((Function<BaseResponse<T>, Observable<T>>) baseResponse ->
 
                                 Observable.create(emitter -> {
                                     try {
-                                        for (T item : cinematographicResponse.getResults()) {
+                                        for (T item : baseResponse.getResults()) {
                                             emitter.onNext(item);
                                         }
                                         emitter.onComplete();

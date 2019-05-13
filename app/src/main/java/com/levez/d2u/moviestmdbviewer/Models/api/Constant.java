@@ -4,9 +4,10 @@ public class Constant {
 
     public static final String BASE_URL_IMAGE = "https://image.tmdb.org/t/p/w500";
 
+
     static final String BASE_URL = "http://api.themoviedb.org/3/";
     public static final String API_KEY = "8ae03112f333d6386161cffe6268c009";
-
+    public static final String LANGUAGE = "en-US";
 
     public static final String SORT_BY_MORE_POPULARITY = "popularity.desc";
     public static final String SORT_BY_VOTE_AVERAGE = "vote_average.desc";
@@ -19,4 +20,8 @@ public class Constant {
 
     public static final String TAG_TYPE_TV_SERIES = "tv";
     public static final String TAG_TYPE_MOVIE = "movie";
+    public static final String TAG_TYPE_PEOPLE = "person";
+
+    public static final boolean INCLUDE_ADULT = false;
+
 }

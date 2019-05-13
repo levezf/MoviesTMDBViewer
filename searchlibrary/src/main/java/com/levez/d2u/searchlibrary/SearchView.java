@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -99,9 +100,6 @@ public class SearchView extends FrameLayout {
             mSearchView.setHint(mHint);
         }
 
-        Drawable drawable =  getResources().getDrawable(mDrawable);
-        drawable.setColorFilter(mDrawableColor, PorterDuff.Mode.SRC_IN);
-
         Drawable drawableClear =  getResources().getDrawable(R.drawable.ic_close_black_24dp);
         drawableClear.setColorFilter(mDrawableColor, PorterDuff.Mode.SRC_IN);
         mClearButton.setImageDrawable(drawableClear);
@@ -114,8 +112,7 @@ public class SearchView extends FrameLayout {
             }
         });
 
-
-        mSearchView.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable,null,null,null);
+       setDrawable(mDrawable);
 
         mSearchView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -177,7 +174,8 @@ public class SearchView extends FrameLayout {
     }
 
     public void setHint(String hint) {
-        this.mHint = mHint;
+        this.mHint = hint;
+        mSearchView.setHint(hint);
     }
 
     @DrawableRes
@@ -187,6 +185,8 @@ public class SearchView extends FrameLayout {
 
     public void setDrawable(@DrawableRes int drawable) {
         this.mDrawable = drawable;
+        mSearchView.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                coloredDrawable(drawable, mDrawableColor),null,null,null);
     }
 
     @ColorInt
@@ -196,5 +196,12 @@ public class SearchView extends FrameLayout {
 
     public void setDrawableColor(@ColorInt int drawableColor) {
         this.mDrawableColor = drawableColor;
+        setDrawable(mDrawable);
+    }
+
+    private Drawable coloredDrawable(@DrawableRes int drawable, @ColorInt int color) {
+        Drawable d =  getResources().getDrawable(drawable);
+        d.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        return d;
     }
 }

@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TvSeries extends Cinematographic implements Parcelable
-{
+public class TvSeries extends Cinematographic implements Parcelable {
 
     @SerializedName("original_name")
     @Expose

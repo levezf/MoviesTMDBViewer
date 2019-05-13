@@ -1,5 +1,7 @@
 package com.levez.d2u.moviestmdbviewer.Models.Repositorys;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
@@ -44,14 +46,21 @@ public class TvSeriesDataRepository extends CinematographicDataRepository<TvSeri
         return getCinematographic(
                 RetrofitConfig
                         .getCinematographicService()
-                        .getSeriesByGenre(Constant.API_KEY, genre.getId(), Constant.SORT_BY_MORE_POPULARITY, page),
+                        .getSeriesByGenre(Constant.API_KEY,
+                                genre.getId(),
+                                Constant.SORT_BY_MORE_POPULARITY,
+                                Constant.LANGUAGE,
+                                page),
                 mLiveDatas.get(genre.getName())
         );
     }
 
     private LiveData<List<TvSeries>> getSeries(String TAG, String sortBy, int page){
         return getCinematographic(
-                RetrofitConfig.getCinematographicService().getSeries(Constant.API_KEY, sortBy, page),
+                RetrofitConfig.getCinematographicService().getSeries(Constant.API_KEY,
+                        sortBy,
+                        Constant.LANGUAGE,
+                        page),
                 mLiveDatas.get(TAG));
     }
 }

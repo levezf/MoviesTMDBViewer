@@ -1,29 +1,44 @@
 package com.levez.d2u.moviestmdbviewer.View;
 
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+
+import android.app.MediaRouteButton;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.levez.d2u.moviestmdbviewer.Adapter.ListSearchAdapter;
+import com.levez.d2u.moviestmdbviewer.Adapter.PaginationScrollListener;
+import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
+import com.levez.d2u.moviestmdbviewer.Models.entity.Searchable;
 import com.levez.d2u.moviestmdbviewer.R;
 import com.levez.d2u.moviestmdbviewer.ViewModels.SearchViewModel;
 import com.levez.d2u.searchlibrary.SearchView;
 
-public class SearchFragment extends Fragment {
+import java.util.List;
+
+public class SearchFragment extends Fragment implements ListSearchAdapter.OnSearchItemClickListener {
 
 
     private View mView;
     private SearchView mSearchView;
     private RecyclerView mList;
     private SearchViewModel mViewModel;
-
+    private ListSearchAdapter mAdapter;
+    private AppCompatTextView mMessageHelper;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -32,6 +47,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
     }
 
     @Nullable
@@ -41,6 +57,7 @@ public class SearchFragment extends Fragment {
 
         mSearchView = mView.findViewById(R.id.searchView);
         mList = mView.findViewById(R.id.rv_list);
+        mMessageHelper = mView.findViewById(R.id.tv_helper);
 
         return mView;
 
@@ -50,19 +67,35 @@ public class SearchFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
+
+        bindSearchView();
+        bindSearchList();
+
+        mViewModel.getSearch().observe(this, searchables -> mAdapter.refresh(searchables));
+
+    }
+
+    private void bindSearchList() {
 
 
+        LinearLayoutManager layout = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+        mAdapter = new ListSearchAdapter();
+        mList.setHasFixedSize(true);
+        mList.setLayoutManager(layout);
+        mList.setAdapter(mAdapter);
+        mList.addOnScrollListener(new PaginationScrollListener(layout, () -> mViewModel.incrementPage()));
+        mAdapter.setOnSearchItemClickListener(this);
+    }
 
+    private void bindSearchView() {
+        mSearchView.setHint("Search for movies, series and people...");
         mSearchView.setOnTextChangeListener(new SearchView.OnTextChangeListener() {
-
-//TODO fazer consulta por tag -- Artista / Filme / Série / Gênero
 
             @Override
             public void onSuggestion(String suggestion) {
 
-
-                //pega suggestion
+                mAdapter.clear();
+                changeSearchText(suggestion);
 
                 Log.d("tag", "onSuggestion: ");
             }
@@ -70,22 +103,45 @@ public class SearchFragment extends Fragment {
             @Override
             public void onSubmitted(String submitted) {
 
-                //pega consulta certa
-
-
-                Log.d("tag", "onSubmitted: ");
-
             }
 
             @Override
             public void onCleared() {
 
-                Log.d("tag", "onCleared: ");
+                mAdapter.clear();
+                mList.setVisibility(View.GONE);
+                mMessageHelper.setVisibility(View.VISIBLE);
+                //hide recyclerview
+                //clear recyclerview
+                //show help
 
             }
         });
+    }
+
+    private void changeSearchText(String s) {
+
+        mViewModel.setQuery(s);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mViewModel.clear();
+    }
+
+    @Override
+    public void onClick(View v, int position, String tagType) {
+        if(tagType.equals(Constant.TAG_TYPE_MOVIE)){
 
 
+        }else if(tagType.equals(Constant.TAG_TYPE_TV_SERIES)){
 
+
+        }else{
+
+
+        }
     }
 }

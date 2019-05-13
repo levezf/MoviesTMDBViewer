@@ -65,4 +65,8 @@ public class RetrofitConfig {
         return getService(GenresService.class);
     }
 
+    public static SearchService getSearchService(){
+        return getService(SearchService.class);
+    }
+
 }

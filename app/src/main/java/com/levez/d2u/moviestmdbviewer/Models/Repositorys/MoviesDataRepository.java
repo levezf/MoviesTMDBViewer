@@ -47,7 +47,9 @@ public class MoviesDataRepository extends CinematographicDataRepository<Movie> {
         return getCinematographic(
                 RetrofitConfig
                         .getCinematographicService()
-                        .getMoviesByGenre(Constant.API_KEY, genre.getId(), Constant.SORT_BY_MORE_POPULARITY, page),
+                        .getMoviesByGenre(Constant.API_KEY, genre.getId(),
+                                Constant.SORT_BY_MORE_POPULARITY,
+                                Constant.LANGUAGE, page),
                 mLiveDatas.get(genre.getName())
         );
     }
@@ -55,7 +57,8 @@ public class MoviesDataRepository extends CinematographicDataRepository<Movie> {
 
     private LiveData<List<Movie>> getDiscoverMovies(String TAG, String sortBy, int page){
         return getCinematographic(
-                RetrofitConfig.getCinematographicService().getMovies(Constant.API_KEY, sortBy, page),
+                RetrofitConfig.getCinematographicService().getMovies(Constant.API_KEY,  sortBy,
+                        Constant.LANGUAGE, page),
                 mLiveDatas.get(TAG));
     }
 

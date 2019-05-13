@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Cinematographic implements Parcelable {
+public class Cinematographic extends Searchable implements Parcelable {
 
     @SerializedName("poster_path")
     @Expose

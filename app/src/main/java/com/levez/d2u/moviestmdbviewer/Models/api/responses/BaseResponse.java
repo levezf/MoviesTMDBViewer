@@ -5,13 +5,15 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
+import com.levez.d2u.moviestmdbviewer.Models.entity.Searchable;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
+import com.levez.d2u.moviestmdbviewer.Models.entity.People;
 import com.levez.d2u.moviestmdbviewer.Models.entity.TvSeries;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class CinematographicResponse<T extends Cinematographic> implements Parcelable
+public class BaseResponse<T extends Searchable> implements Parcelable
 {
 
     @SerializedName("page")
@@ -25,28 +27,30 @@ public class CinematographicResponse<T extends Cinematographic> implements Parce
     private Integer totalPages;
     @SerializedName("results")
     @Expose
-    private List<T> results = null;
+    private List<T> results = new ArrayList<>();
 
-    public final static Parcelable.Creator<CinematographicResponse> CREATOR = new Creator<CinematographicResponse>() {
+    public final static Parcelable.Creator<BaseResponse> CREATOR = new Creator<BaseResponse>() {
 
 
-        public CinematographicResponse createFromParcel(Parcel in) {
-            return new CinematographicResponse(in);
+        public BaseResponse createFromParcel(Parcel in) {
+            return new BaseResponse(in);
         }
 
-        public CinematographicResponse[] newArray(int size) {
-            return (new CinematographicResponse[size]);
+        public BaseResponse[] newArray(int size) {
+            return (new BaseResponse[size]);
         }
 
     };
 
-    protected CinematographicResponse(Parcel in) {
+    protected BaseResponse(Parcel in) {
 
         ClassLoader classLoader;
         if(results.get(0) instanceof Movie){
             classLoader = Movie.class.getClassLoader();
-        }else{
+        }else if(results.get(0) instanceof TvSeries){
             classLoader = TvSeries.class.getClassLoader();
+        }else{
+            classLoader = People.class.getClassLoader();
         }
 
         this.page = ((Integer) in.readValue((Integer.class.getClassLoader())));
@@ -55,7 +59,7 @@ public class CinematographicResponse<T extends Cinematographic> implements Parce
         in.readList(this.results, classLoader);
     }
 
-    public CinematographicResponse() {
+    public BaseResponse() {
     }
 
     public Integer getPage() {
