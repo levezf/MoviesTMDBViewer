@@ -76,6 +76,10 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
 
         mViewModel.getSearch().observe(this, searchables -> {
             mProgress.setVisibility(View.GONE);
+            if((searchables==null || searchables.isEmpty()) && mAdapter.getItemCount()==0){
+                mMessageHelper.setText("Oops! We could not find any results for your search.");
+                mMessageHelper.setVisibility(View.VISIBLE);
+            }
             mAdapter.refresh(searchables);
         });
 
@@ -117,11 +121,12 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
             public void onCleared() {
 
                 mAdapter.clear();
+                mAdapter.notifyDataSetChanged();
+                mViewModel.setQuery("");
+                mProgress.setVisibility(View.GONE);
                 mList.setVisibility(View.GONE);
+                mMessageHelper.setText(R.string.text_help);
                 mMessageHelper.setVisibility(View.VISIBLE);
-                //hide recyclerview
-                //clear recyclerview
-                //show help
 
             }
         });

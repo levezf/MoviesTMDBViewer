@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">MoviesTMDB Viewer</string>
     <string name="text_help">Use the search form above to search for movies, TV shows and people</string>
+    <string name="msg_overview_empty">Overview not available...</string>
 </resources>

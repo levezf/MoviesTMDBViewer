@@ -12,45 +12,84 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:paddingEnd="8dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:paddingStart="16dp"
+
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:innerRadius="0dp"
+            android:shape="ring"
+            android:thicknessRatio="1.9"
+            app:cardCornerRadius="40dp"
+            app:cardElevation="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_poster"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+<!--
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_poster"
             android:layout_width="100dp"
             android:layout_height="160dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />-->
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_title"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:maxLines="1"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:ellipsize="end"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_poster"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_marginEnd="10dp"
-            android:id="@+id/tv_overview"
-            android:textSize="12sp"
+        <LinearLayout
+            android:layout_marginStart="16dp"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:ellipsize="end"
-            android:maxLines="7"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_poster"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+            app:layout_constraintStart_toEndOf="@+id/card"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatRatingBar
+                android:id="@+id/rb_popularity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/ratingBarStyleSmall"
+                android:numStars="5"
+                android:stepSize="0.1"
+                android:isIndicator="true"
+                android:layout_gravity="end"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:ellipsize="end"
+                android:gravity="start"
+                android:maxLines="1"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

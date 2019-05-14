@@ -6,11 +6,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
+import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
 import com.levez.d2u.moviestmdbviewer.Models.entity.People;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Searchable;
@@ -49,14 +51,10 @@ public class ListSearchAdapter  extends  RecyclerView.Adapter<RecyclerView.ViewH
 
         switch (viewType){
 
-            case MOVIE:{
-                viewHolder = new ViewHolderMovie(
-                        inflater.inflate(R.layout.item_list_movie, parent, false));
-                break;
-            }
+            case MOVIE:
             case TV_SERIES:{
-                viewHolder = new ViewHolderSeries(
-                        inflater.inflate(R.layout.item_list_serie, parent, false));
+                viewHolder = new ViewHolderCinematographic(
+                        inflater.inflate(R.layout.item_list_cinematographic, parent, false));
                 break;
             }
             case PEOPLE:{
@@ -80,15 +78,10 @@ public class ListSearchAdapter  extends  RecyclerView.Adapter<RecyclerView.ViewH
         switch (holder.getItemViewType()){
 
 
-            case MOVIE:{ // Movie
-
-                buildItemMovie((ViewHolderMovie) holder, position);
-
-                break;
-            }
+            case MOVIE:
             case TV_SERIES:{ // TvSeries
 
-                buildItemTvSerie((ViewHolderSeries) holder, position);
+                buildItemCinematographic((ViewHolderCinematographic) holder, position);
 
                 break;
             }
@@ -101,7 +94,6 @@ public class ListSearchAdapter  extends  RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-
     private void buildItemPeople(ViewHolderPeople holder, int position) {
 
         People p = ((People) mSearchables.get(position));
@@ -113,35 +105,52 @@ public class ListSearchAdapter  extends  RecyclerView.Adapter<RecyclerView.ViewH
                 .centerCrop()
                 .into(holder.iv_poster);
 
-        holder.bindClick(position);
-    }
+        holder.rb_popularity.setRating(p.getPopularity().floatValue());
 
-    private void buildItemTvSerie(ViewHolderSeries holder, int position) {
-
-        TvSeries ts = ((TvSeries) mSearchables.get(position));
-
-        holder.tv_title.setText(ts.getName());
-        holder.tv_overview.setText(ts.getOverview());
-
-        Glide
-                .with(holder.itemView.getContext())
-                .load(Constant.BASE_URL_IMAGE + ts.getPosterPath())
-                .centerCrop()
-                .into(holder.iv_poster);
+        holder.rb_popularity.setStepSize(0.01f);
+        holder.rb_popularity.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> { });
+        holder.rb_popularity.invalidate();
 
         holder.bindClick(position);
     }
 
-    private void buildItemMovie(ViewHolderMovie holder, int position) {
+    private void buildItemCinematographic(ViewHolderCinematographic holder, int position) {
 
-        Movie m = ((Movie) mSearchables.get(position));
+        holder.attachTagType((getItemViewType(position) == MOVIE)?Constant.TAG_TYPE_MOVIE : Constant.TAG_TYPE_TV_SERIES);
 
-        holder.tv_title.setText(m.getTitle());
-        holder.tv_overview.setText(m.getOverview());
+        Cinematographic c;
+        if(getItemViewType(position) == MOVIE){
+            holder.attachTagType(Constant.TAG_TYPE_MOVIE);
+            c = ((Movie) mSearchables.get(position));
+            holder.tv_type.setText("Movie");
+            holder.tv_title.setText(((Movie) c).getTitle());
+
+        }else{
+            holder.attachTagType(Constant.TAG_TYPE_TV_SERIES);
+            c = ((TvSeries) mSearchables.get(position));
+            holder.tv_title.setText(((TvSeries) c).getName());
+            holder.tv_type.setText("Tv Series");
+        }
+
+        if(c.getOverview()==null || c.getOverview().isEmpty()){
+
+            holder.tv_overview.setText(R.string.msg_overview_empty);
+
+        }else {
+
+            holder.tv_overview.setText(c.getOverview());
+
+        }
+
+        holder.rb_popularity.setRating(c.getPopularity().floatValue());
+
+        holder.rb_popularity.setStepSize(0.01f);
+        holder.rb_popularity.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> { });
+        holder.rb_popularity.invalidate();
 
         Glide
                 .with(holder.itemView.getContext())
-                .load(Constant.BASE_URL_IMAGE + m.getPosterPath())
+                .load(Constant.BASE_URL_IMAGE + c.getPosterPath())
                 .centerCrop()
                 .into(holder.iv_poster);
 
@@ -179,59 +188,47 @@ public class ListSearchAdapter  extends  RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-
-
     public void clear() {
         this.mSearchables.clear();
     }
 
-    class ViewHolderMovie extends BaseViewHolder {
+    class ViewHolderCinematographic extends BaseViewHolder {
 
         AppCompatTextView tv_title;
         AppCompatTextView tv_overview;
         AppCompatImageView iv_poster;
-
-        ViewHolderMovie(@NonNull View itemView) {
-            super(itemView, Constant.TAG_TYPE_MOVIE);
-
-            tv_title = itemView.findViewById(R.id.tv_title);
-            tv_overview = itemView.findViewById(R.id.tv_overview);
-            iv_poster = itemView.findViewById(R.id.iv_poster);
-        }
-    }
-
-    class ViewHolderSeries extends BaseViewHolder {
+        AppCompatRatingBar rb_popularity;
+        AppCompatTextView tv_type;
 
 
-        AppCompatTextView tv_title;
-        AppCompatTextView tv_overview;
-        AppCompatImageView iv_poster;
-
-        ViewHolderSeries(@NonNull View itemView) {
-            super(itemView, Constant.TAG_TYPE_TV_SERIES);
+        ViewHolderCinematographic(@NonNull View itemView) {
+            super(itemView);
 
             tv_title = itemView.findViewById(R.id.tv_title);
             tv_overview = itemView.findViewById(R.id.tv_overview);
             iv_poster = itemView.findViewById(R.id.iv_poster);
+            rb_popularity = itemView.findViewById(R.id.rb_popularity);
+            tv_type = itemView.findViewById(R.id.tv_type);
+            tv_overview.setText("");
         }
+
     }
 
     class ViewHolderPeople extends BaseViewHolder {
 
         AppCompatTextView tv_title;
-        AppCompatTextView tv_overview;
+        AppCompatRatingBar rb_popularity;
         AppCompatImageView iv_poster;
 
         ViewHolderPeople(@NonNull View itemView) {
-            super(itemView, Constant.TAG_TYPE_PEOPLE);
+            super(itemView);
 
-
+            this.attachTagType(Constant.TAG_TYPE_PEOPLE);
             tv_title = itemView.findViewById(R.id.tv_title);
-            tv_overview = itemView.findViewById(R.id.tv_overview);
+            rb_popularity = itemView.findViewById(R.id.rb_popularity);
             iv_poster = itemView.findViewById(R.id.iv_poster);
-
-            tv_overview.setText("");
         }
+
 
 
     }
@@ -240,9 +237,13 @@ public class ListSearchAdapter  extends  RecyclerView.Adapter<RecyclerView.ViewH
 
         private String mTagType;
 
-        BaseViewHolder(@NonNull View itemView, String tagType) {
+        BaseViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTagType = tagType;
+        }
+
+
+        void attachTagType(String tagType){
+            this.mTagType = tagType;
         }
 
         void bindClick(int position){
