@@ -5,7 +5,7 @@ public class Constant {
     public static final String BASE_URL_IMAGE = "https://image.tmdb.org/t/p/w500";
 
 
-    static final String BASE_URL = "http://api.themoviedb.org/3/";
+    static final String BASE_URL = "https://api.themoviedb.org/3/";
     public static final String API_KEY = "8ae03112f333d6386161cffe6268c009";
     public static final String LANGUAGE = "en-US";
 
