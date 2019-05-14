@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.levez.d2u.moviestmdbviewer.Adapter.ListSearchAdapter;
@@ -39,6 +40,7 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
     private SearchViewModel mViewModel;
     private ListSearchAdapter mAdapter;
     private AppCompatTextView mMessageHelper;
+    private ProgressBar mProgress;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -58,6 +60,7 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
         mSearchView = mView.findViewById(R.id.searchView);
         mList = mView.findViewById(R.id.rv_list);
         mMessageHelper = mView.findViewById(R.id.tv_helper);
+        mProgress = mView.findViewById(R.id.progress);
 
         return mView;
 
@@ -71,7 +74,10 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
         bindSearchView();
         bindSearchList();
 
-        mViewModel.getSearch().observe(this, searchables -> mAdapter.refresh(searchables));
+        mViewModel.getSearch().observe(this, searchables -> {
+            mProgress.setVisibility(View.GONE);
+            mAdapter.refresh(searchables);
+        });
 
     }
 
@@ -96,6 +102,8 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
 
                 mAdapter.clear();
                 changeSearchText(suggestion);
+                mMessageHelper.setVisibility(View.GONE);
+                mList.setVisibility(View.VISIBLE);
 
                 Log.d("tag", "onSuggestion: ");
             }
@@ -120,7 +128,7 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
     }
 
     private void changeSearchText(String s) {
-
+        mProgress.setVisibility(View.VISIBLE);
         mViewModel.setQuery(s);
 
     }
