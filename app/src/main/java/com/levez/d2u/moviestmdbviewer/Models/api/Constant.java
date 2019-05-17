@@ -3,10 +3,15 @@ package com.levez.d2u.moviestmdbviewer.Models.api;
 public class Constant {
 
     public static final String BASE_URL_IMAGE = "https://image.tmdb.org/t/p/w500";
+    public static final String BASE_URL_YOUTUBE = "http://www.youtube.com/watch?v=";
+
+    public static final String SITE_VIDEOS = "YouTube";
 
 
     static final String BASE_URL = "https://api.themoviedb.org/3/";
     public static final String API_KEY = "8ae03112f333d6386161cffe6268c009";
+    public static final String APPEND_RESPONSE_DEFAULT = "videos,similar,credits";
+
     public static final String LANGUAGE = "en-US";
 
     public static final String SORT_BY_MORE_POPULARITY = "popularity.desc";
@@ -24,4 +29,11 @@ public class Constant {
 
     public static final boolean INCLUDE_ADULT = false;
 
+
+
+    public static final String TAG_FRAG_DETAILS_MOVIE = "tag_fragment_details_movie";
+    public static final String TAG_FRAG_MOVIE = "tag_fragment_movies";
+    public static final String TAG_FRAG_SEARCH = "tag_fragment_search";
+    public static final String TAG_FRAG_TV_SERIES = "tag_fragment_tv_series";
+    public static final String TAG_FRAG_FAVORITES = "tag_fragment_favorites";
 }

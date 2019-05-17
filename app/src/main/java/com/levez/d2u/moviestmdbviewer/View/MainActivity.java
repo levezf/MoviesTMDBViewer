@@ -9,6 +9,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.view.MenuItem;
 
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
@@ -20,7 +22,13 @@ import java.util.List;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
+import static com.levez.d2u.moviestmdbviewer.Models.api.Constant.TAG_FRAG_FAVORITES;
+import static com.levez.d2u.moviestmdbviewer.Models.api.Constant.TAG_FRAG_MOVIE;
+import static com.levez.d2u.moviestmdbviewer.Models.api.Constant.TAG_FRAG_SEARCH;
+import static com.levez.d2u.moviestmdbviewer.Models.api.Constant.TAG_FRAG_TV_SERIES;
+
 public class MainActivity extends DaggerAppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+
 
 
     private Bundle mSavedInstanceState;
@@ -84,7 +92,7 @@ public class MainActivity extends DaggerAppCompatActivity implements BottomNavig
         });
 
         if (mSavedInstanceState == null) {
-            inflateFragment(CinematographicFragment.newInstance(Constant.TAG_TYPE_MOVIE));
+            inflateFragment(CinematographicFragment.newInstance(Constant.TAG_TYPE_MOVIE),TAG_FRAG_MOVIE);
         }
     }
 
@@ -93,35 +101,51 @@ public class MainActivity extends DaggerAppCompatActivity implements BottomNavig
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         Fragment fragment = null;
+        String tag = "";
 
         switch (menuItem.getItemId()){
 
             case R.id.action_search:
                 fragment = SearchFragment.newInstance();
+                tag = TAG_FRAG_SEARCH;
                 break;
 
             case R.id.action_movies:
                 fragment = CinematographicFragment.newInstance(Constant.TAG_TYPE_MOVIE);
+                tag = TAG_FRAG_MOVIE;
+
                 break;
 
             case R.id.action_series:
                 fragment = CinematographicFragment.newInstance(Constant.TAG_TYPE_TV_SERIES);
+                tag = TAG_FRAG_TV_SERIES;
                 break;
 
             case R.id.action_favorites:
                 fragment = new Fragment();
+                tag = TAG_FRAG_FAVORITES;
                 break;
         }
 
-        inflateFragment(fragment);
+        inflateFragment(fragment, tag);
 
         return true;
     }
 
 
-    private void inflateFragment(Fragment fragment){
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, fragment)
-                .commitNow();
+    public void inflateFragment(Fragment fragment, String tag){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, fragment);
+        if(fragment instanceof DetailsCinematographicFragment){
+
+            if(tag.equals(Constant.TAG_FRAG_DETAILS_MOVIE)){
+                transaction.addToBackStack(TAG_FRAG_MOVIE);
+            }
+
+        }
+
+
+        transaction.commit();
+
     }
 }

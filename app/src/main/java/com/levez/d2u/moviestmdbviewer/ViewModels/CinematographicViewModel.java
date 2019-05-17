@@ -100,6 +100,8 @@ public class CinematographicViewModel extends ViewModel {
         });
     }
 
+
+
     public LiveData<List<Cinematographic>> getMovieFavorites() {
         return null;
     }

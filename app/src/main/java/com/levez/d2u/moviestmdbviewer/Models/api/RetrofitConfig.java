@@ -3,6 +3,9 @@ package com.levez.d2u.moviestmdbviewer.Models.api;
 import android.os.CountDownTimer;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -33,15 +36,15 @@ public class RetrofitConfig {
 
             if(mRetrofit==null){
 
-                HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
 
-                httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+                httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
 
                 OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                         .connectTimeout(30, TimeUnit.MINUTES)
                         .readTimeout(30, TimeUnit.SECONDS)
                         .writeTimeout(15, TimeUnit.SECONDS)
-                        //.addInterceptor(httpLoggingInterceptor)
+                        .addInterceptor(httpLoggingInterceptor)
                         .build();
 
                 mRetrofit = new Retrofit

@@ -6,6 +6,8 @@ import com.levez.d2u.moviestmdbviewer.Models.entity.TvSeries;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface CinematographicService {
@@ -27,6 +29,19 @@ public interface CinematographicService {
             @Query("language") String language,
             @Query("page") int page);
 
+
+    @GET("movie/{id}")
+    Observable<Movie> getDetailsMovie(
+            @Path("id") int id,
+            @Query("api_key") String apiKey,
+            @Query("language") String language,
+            @Query("append_to_response") String append);
+
+    @GET("movie/{id}")
+    Observable<Movie> getDetailsMovie(
+            @Path("id") int id,
+            @Query("api_key") String apiKey,
+            @Query("language") String language);
 
 
     /*-------------------TV Series----------------------*/

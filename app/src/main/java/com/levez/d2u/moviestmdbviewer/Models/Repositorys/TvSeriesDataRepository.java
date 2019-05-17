@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
 import com.levez.d2u.moviestmdbviewer.Models.api.RetrofitConfig;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Genre;
+import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
 import com.levez.d2u.moviestmdbviewer.Models.entity.MutableListMap;
 import com.levez.d2u.moviestmdbviewer.Models.entity.TvSeries;
 
@@ -55,6 +56,11 @@ public class TvSeriesDataRepository extends CinematographicDataRepository<TvSeri
         );
     }
 
+    @Override
+    public LiveData<TvSeries> getById(int id) {
+        return null;
+    }
+
     private LiveData<List<TvSeries>> getSeries(String TAG, String sortBy, int page){
         return getCinematographic(
                 RetrofitConfig.getCinematographicService().getSeries(Constant.API_KEY,
@@ -63,4 +69,16 @@ public class TvSeriesDataRepository extends CinematographicDataRepository<TvSeri
                         page),
                 mLiveDatas.get(TAG));
     }
+
+   /* @Override
+    public LiveData<TvSeries> getById(int id) {
+
+        mLiveDatas.put(String.valueOf(id), new MutableListMap());
+        //noinspection ConstantConditions
+        mLiveDatas.get(String.valueOf(id)).initLiveData();
+
+        return getDetailsCinematographic(
+                RetrofitConfig.getCinematographicService().getDetailsMovie(id, Constant.API_KEY, Constant.LANGUAGE,
+                        Constant.APPEND_RESPONSE_DEFAULT));
+    }*/
 }

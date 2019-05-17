@@ -1,15 +1,21 @@
 package com.levez.d2u.moviestmdbviewer.Adapter;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.levez.d2u.categoryhorizontalview.CategoryHorizontalView;
+import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
 import com.levez.d2u.moviestmdbviewer.R;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class ListCategoryViewAdapter  extends RecyclerView.Adapter<ListCategoryViewAdapter.ViewHolder> {
 
@@ -32,6 +38,7 @@ public class ListCategoryViewAdapter  extends RecyclerView.Adapter<ListCategoryV
         viewHolder.category.setTitle(c.getTitle());
         viewHolder.category.setOnCategoryPagingListener(c.getOnCategoryPagingListener());
         viewHolder.category.disableShowMore(true);
+
         viewHolder.category.startRecyclerView(c.getAdapter());
 
         if(c.isProgressShow()){
@@ -48,8 +55,8 @@ public class ListCategoryViewAdapter  extends RecyclerView.Adapter<ListCategoryV
     }
 
     public void insertItem(CategoryHorizontalView categoryHorizontalView, String tag) {
-        mCategories.add(categoryHorizontalView);
         mTags.add(tag);
+        mCategories.add(categoryHorizontalView);
         notifyItemInserted(getItemCount()-1);
     }
 
@@ -63,12 +70,16 @@ public class ListCategoryViewAdapter  extends RecyclerView.Adapter<ListCategoryV
         notifyItemChanged(index);
     }
 
-    public void hideProgress(String tag) {
-        int index = mTags.indexOf(tag);
+    public void hideProgress(String tag, List<Cinematographic> cs) {
 
-        if(mCategories.get(index).getAdapter().getItemCount() == 0){
-            mCategories.get(index).hideProgress();
-            notifyItemChanged(index);
+
+        if(!mTags.isEmpty()) {
+
+            int index = mTags.indexOf(tag);
+            if(index!=-1) {
+                mCategories.get(index).hideProgress();
+                notifyItemChanged(index);
+            }
         }
     }
 

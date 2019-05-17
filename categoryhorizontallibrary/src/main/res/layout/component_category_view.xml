@@ -9,6 +9,7 @@
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header"
         android:paddingStart="10dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
@@ -23,7 +24,6 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLength="25"
-            android:text="Mais Votados"
             android:textSize="20sp"
             android:textStyle="bold"
             category:layout_constraintBottom_toBottomOf="parent"

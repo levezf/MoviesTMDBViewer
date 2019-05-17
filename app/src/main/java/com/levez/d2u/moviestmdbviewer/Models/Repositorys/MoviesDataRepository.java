@@ -62,5 +62,13 @@ public class MoviesDataRepository extends CinematographicDataRepository<Movie> {
                 mLiveDatas.get(TAG));
     }
 
+    @Override
+    public LiveData<Movie> getById(int id) {
 
+        return getDetailsCinematographic(
+                RetrofitConfig.getCinematographicService().getDetailsMovie(id,
+                        Constant.API_KEY,
+                        Constant.LANGUAGE,
+                        Constant.APPEND_RESPONSE_DEFAULT));
+    }
 }

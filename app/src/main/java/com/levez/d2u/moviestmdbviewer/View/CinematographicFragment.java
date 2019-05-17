@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,9 +25,11 @@ import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Genre;
 import com.levez.d2u.moviestmdbviewer.R;
 import com.levez.d2u.moviestmdbviewer.ViewModels.CinematographicViewModel;
+import com.levez.d2u.moviestmdbviewer.ViewModels.DetailsCinematographicViewModel;
 import com.levez.d2u.moviestmdbviewer.ViewModels.GenresViewModel;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -99,7 +102,7 @@ public class CinematographicFragment extends Fragment {
         mRecycler = mView.findViewById(R.id.rv_list);
         mRecycler.setHasFixedSize(true);
         mRecycler.setAdapter(mAdapter);
-        mRecycler.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+        mRecycler.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL, false));
 
         if(mTagType.equals(Constant.FAVORITES)){
             initFavorites();
@@ -167,6 +170,12 @@ public class CinematographicFragment extends Fragment {
 
         adapter.setClickListener((v, position) -> {
             //mostra detalhes do cine
+
+            if(getActivity()!=null){
+                ((MainActivity) getActivity())
+                        .inflateFragment(
+                                DetailsCinematographicFragment.newInstance(adapter.get(position).getId()), Constant.TAG_FRAG_DETAILS_MOVIE);
+            }
         });
 
         categoryHorizontalView.startRecyclerView(adapter);
@@ -178,7 +187,7 @@ public class CinematographicFragment extends Fragment {
             if(ts ==null|| ts.isEmpty()){
                 mAdapter.showProgress(tag);
             }else{
-                mAdapter.hideProgress(tag);
+                mAdapter.hideProgress(tag, ts);
                 adapter.insertItems(ts);
             }
 

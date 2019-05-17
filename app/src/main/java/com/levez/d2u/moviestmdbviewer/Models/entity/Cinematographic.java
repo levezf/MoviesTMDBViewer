@@ -5,7 +5,10 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.levez.d2u.moviestmdbviewer.Models.api.responses.BaseResponse;
+import com.levez.d2u.moviestmdbviewer.Models.api.responses.VideoResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Cinematographic extends Searchable implements Parcelable {
@@ -16,7 +19,7 @@ public class Cinematographic extends Searchable implements Parcelable {
 
     @SerializedName("genre_ids")
     @Expose
-    private List<Integer> genreIds = null;
+    private List<Integer> genreIds;
 
     @SerializedName("original_language")
     @Expose
@@ -45,6 +48,30 @@ public class Cinematographic extends Searchable implements Parcelable {
     @SerializedName("id")
     @Expose
     private Integer id;
+
+    @SerializedName("genres")
+    @Expose
+    private List<Genre> genres;
+
+    @SerializedName("production_companies")
+    @Expose
+    private List<ProductionCompany> productionCompanies;
+
+    @SerializedName("revenue")
+    @Expose
+    private long revenue;
+
+    @SerializedName("runtime")
+    @Expose
+    private Integer runtime;
+
+    @SerializedName("videos")
+    @Expose
+    private VideoResponse videosResponse;
+
+    @SerializedName("credits")
+    @Expose
+    private Credits credits;
 
 
     @Expose(deserialize = false, serialize = false)
@@ -142,34 +169,178 @@ public class Cinematographic extends Searchable implements Parcelable {
         this.idDatabase = idDatabase;
     }
 
-    Cinematographic(Parcel in) {
-        idDatabase = in.readLong();
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
+    }
+
+    public List<ProductionCompany> getProductionCompanies() {
+        return productionCompanies;
+    }
+
+    public void setProductionCompanies(List<ProductionCompany> productionCompanies) {
+        this.productionCompanies = productionCompanies;
+    }
+
+    public long getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(long revenue) {
+        this.revenue = revenue;
+    }
+
+    public Integer getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(Integer runtime) {
+        this.runtime = runtime;
+    }
+
+    public List<Video> getVideos() {
+
+        return videosResponse!=null?videosResponse.getVideos():new ArrayList<>();
+
+    }
+
+    public void setVideos(List<Video> videos) {
+
+        if(videosResponse!=null){
+            videosResponse.setVideos(videos);
+        }else{
+            videosResponse = new VideoResponse();
+            videosResponse.setVideos(videos);
+        }
+    }
+
+    public Credits getCredits() {
+        return credits;
+    }
+
+    public void setCredits(Credits credits) {
+        this.credits = credits;
+    }
+
+
+
+    public Cinematographic() {
+    }
+
+    protected Cinematographic(Parcel in) {
         posterPath = in.readString();
+        if (in.readByte() == 0x01) {
+            genreIds = new ArrayList<>();
+            in.readList(genreIds, Integer.class.getClassLoader());
+        } else {
+            genreIds = null;
+        }
         originalLanguage = in.readString();
         backdropPath = in.readString();
         overview = in.readString();
-        if (in.readByte() == 0) {
-            popularity = null;
+        popularity = in.readByte() == 0x00 ? null : in.readDouble();
+        voteCount = in.readByte() == 0x00 ? null : in.readInt();
+        voteAverage = in.readByte() == 0x00 ? null : in.readDouble();
+        id = in.readByte() == 0x00 ? null : in.readInt();
+        if (in.readByte() == 0x01) {
+            genres = new ArrayList<>();
+            in.readList(genres, Genre.class.getClassLoader());
         } else {
-            popularity = in.readDouble();
+            genres = null;
         }
-        if (in.readByte() == 0) {
-            voteCount = null;
+        if (in.readByte() == 0x01) {
+            productionCompanies = new ArrayList<>();
+            in.readList(productionCompanies, ProductionCompany.class.getClassLoader());
         } else {
-            voteCount = in.readInt();
+            productionCompanies = null;
         }
-        if (in.readByte() == 0) {
-            voteAverage = null;
+        revenue = in.readByte() == 0x01 ? in.readLong() : 0;
+        runtime = in.readByte() == 0x00 ? null : in.readInt();
+        if (in.readByte() == 0x01) {
+            videosResponse = in.readParcelable(VideoResponse.class.getClassLoader());
         } else {
-            voteAverage = in.readDouble();
+            videosResponse = null;
         }
-        if (in.readByte() == 0) {
-            id = null;
+        credits = (Credits) in.readValue(Credits.class.getClassLoader());
+        favorite = in.readByte() != 0x00;
+        idDatabase = in.readLong();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(posterPath);
+        if (genreIds == null) {
+            dest.writeByte((byte) (0x00));
         } else {
-            id = in.readInt();
+            dest.writeByte((byte) (0x01));
+            dest.writeList(genreIds);
+        }
+        dest.writeString(originalLanguage);
+        dest.writeString(backdropPath);
+        dest.writeString(overview);
+        if (popularity == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(popularity);
+        }
+        if (voteCount == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(voteCount);
+        }
+        if (voteAverage == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(voteAverage);
+        }
+        if (id == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(id);
+        }
+        if (genres == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(genres);
+        }
+        if (productionCompanies == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(productionCompanies);
         }
 
-        favorite = (in.readByte()==1);
+        dest.writeByte((byte) (0x01));
+        dest.writeLong(revenue);
+
+        if (runtime == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(runtime);
+        }
+        if (videosResponse == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeParcelable(videosResponse, flags);
+        }
+        dest.writeValue(credits);
+        dest.writeByte((byte) (favorite ? 0x01 : 0x00));
+        dest.writeLong(idDatabase);
     }
 
     public static final Creator<Cinematographic> CREATOR = new Creator<Cinematographic>() {
@@ -183,47 +354,4 @@ public class Cinematographic extends Searchable implements Parcelable {
             return new Cinematographic[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(idDatabase);
-        dest.writeString(posterPath);
-        dest.writeString(originalLanguage);
-        dest.writeString(backdropPath);
-        dest.writeString(overview);
-        if (popularity == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(popularity);
-        }
-        if (voteCount == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(voteCount);
-        }
-        if (voteAverage == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeDouble(voteAverage);
-        }
-        if (id == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(id);
-        }
-        if(!favorite){
-            dest.writeByte((byte) 0);
-        }else{
-            dest.writeByte((byte) 1);
-        }
-    }
 }

@@ -1,14 +1,18 @@
 package com.levez.d2u.moviestmdbviewer.Models.Repositorys;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
 import com.levez.d2u.moviestmdbviewer.Models.api.responses.BaseResponse;
+import com.levez.d2u.moviestmdbviewer.Models.api.responses.GenresResponse;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Genre;
 import com.levez.d2u.moviestmdbviewer.Models.entity.MutableListMap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +20,9 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
@@ -140,9 +146,64 @@ public abstract class CinematographicDataRepository<T extends Cinematographic> e
     }
 
 
+    MutableLiveData<T> getDetailsCinematographic(Observable<T> observable){
+
+        final MutableLiveData<T> mutable = new MutableLiveData<>();
+
+        mCompositeDisposable.add(
+                observable
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .retryWhen((Observable<Throwable> errors) -> {
+
+                            errors.subscribe(new DisposableObserver<Throwable>() {
+                                @Override
+                                public void onNext(Throwable throwable) {
+                                    Log.e("TAGG", "ERROR: "+ throwable.getMessage() );
+
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+
+                                }
+
+                                @Override
+                                public void onComplete() {
+
+                                }
+                            });
+
+                            return errors.flatMap(error -> Observable.timer(2, TimeUnit.SECONDS));
+                        })
+                        .subscribeWith(new DisposableObserver<T>() {
+
+                            T c;
+
+                            @Override
+                            public void onNext(T t) {
+                                Log.d("TAGG", "onNext: "+ t.getId());
+                                c = t;
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.e("TAGG", "onError: "+e.getMessage() );
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                mutable.postValue(c);
+                            }
+                        })
+        );
+        return mutable;
+
+    }
 
     public abstract LiveData<List<T>> getMorePopularLiveData(int page);
     public abstract LiveData<List<T>> getVoteAverageLiveData(int page);
     public abstract LiveData<List<T>> getVoteCountLiveData(int page);
     public abstract LiveData<List<T>> getByGenre(int page, Genre id);
+    public abstract LiveData<T> getById(int id);
 }

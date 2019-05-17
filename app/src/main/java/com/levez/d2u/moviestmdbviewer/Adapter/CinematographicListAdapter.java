@@ -17,8 +17,16 @@ import java.util.List;
 
 public class CinematographicListAdapter extends RecyclerView.Adapter<CinematographicListAdapter.ViewHolder> {
 
-    private ArrayList<Cinematographic> cinematographics = new ArrayList<>();
+    private List<Cinematographic> mCinematographics;
     private OnItemClickListener mClickListener;
+
+    public CinematographicListAdapter(List<Cinematographic> cinematographics) {
+        this.mCinematographics = cinematographics;
+    }
+
+    public CinematographicListAdapter() {
+        this.mCinematographics = new ArrayList<>();
+    }
 
     @NonNull
     @Override
@@ -30,7 +38,7 @@ public class CinematographicListAdapter extends RecyclerView.Adapter<Cinematogra
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Glide
                 .with(viewHolder.itemView.getContext())
-                .load(Constant.BASE_URL_IMAGE + cinematographics.get(i).getPosterPath())
+                .load(Constant.BASE_URL_IMAGE + mCinematographics.get(i).getPosterPath())
                 .centerCrop()
                 .into(viewHolder.iv_poster);
 
@@ -43,13 +51,17 @@ public class CinematographicListAdapter extends RecyclerView.Adapter<Cinematogra
 
     @Override
     public int getItemCount() {
-        return (cinematographics!=null)?cinematographics.size():0;
+        return (mCinematographics !=null)? mCinematographics.size():0;
     }
 
     public void insertItems(List<Cinematographic> ts) {
-        int size = cinematographics.size();
-        cinematographics.addAll(ts);
-        notifyItemRangeInserted(size, cinematographics.size());
+        int size = mCinematographics.size();
+        mCinematographics.addAll(ts);
+        notifyItemRangeInserted(size, mCinematographics.size());
+    }
+
+    public Cinematographic get(int position) {
+        return mCinematographics.get(position);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

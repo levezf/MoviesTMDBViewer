@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -16,6 +18,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.levez.d2u.categoryhorizontallibrary.R;
+
+import java.util.Objects;
 
 public class CategoryHorizontalView extends FrameLayout {
 
@@ -28,6 +32,7 @@ public class CategoryHorizontalView extends FrameLayout {
     private RecyclerView.Adapter mAdapter;
     private ProgressBar mProgress;
     private View mView;
+    private ConstraintLayout mHeader;
 
     public CategoryHorizontalView(@NonNull Context context) {
         super(context);
@@ -75,18 +80,31 @@ public class CategoryHorizontalView extends FrameLayout {
     }
 
     public void startRecyclerView(RecyclerView.Adapter adapter){
+
         mRecyclerViewList.setHasFixedSize(true);
         this.mAdapter = adapter;
+
+
 
         LinearLayoutManager layout = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
         mRecyclerViewList.setLayoutManager(layout);
         mRecyclerViewList.setAdapter(adapter);
 
+
+        if(mRecyclerViewList.getItemDecorationCount()==0) {
+            DividerItemDecoration itemDecorator = new DividerItemDecoration(getContext(),
+                    DividerItemDecoration.HORIZONTAL);
+            itemDecorator.setDrawable(getResources().getDrawable(R.drawable.divider_space));
+            mRecyclerViewList.addItemDecoration(itemDecorator);
+        }
+
         mRecyclerViewList.addOnScrollListener(new PaginationScrollListener(layout, new PaginationScrollListener.OnScrollListener() {
             @Override
             public void loadMoreItems() {
-                mListener.loadMoreItems();
+                if(mListener!=null){
+                    mListener.loadMoreItems();
+                }
             }
         }));
     }
@@ -137,6 +155,8 @@ public class CategoryHorizontalView extends FrameLayout {
     public boolean isProgressShow() {
         return mProgress.getVisibility()==VISIBLE;
     }
+
+
 
     public interface setOnCategoryPagingListener {
         void loadMoreItems();

@@ -2,4 +2,18 @@
     <string name="app_name">MoviesTMDB Viewer</string>
     <string name="text_help">Use the search form above to search for movies, TV shows and people</string>
     <string name="msg_overview_empty">Overview not available...</string>
+    <string name="cast">Cast</string>
+    <string name="crew">Crew</string>
+    <string name="credits">Credits</string>
+    <string name="genres">Genres</string>
+    <string name="production_companies">Production Companies</string>
+    <string name="production_countries">Production Countries</string>
+    <string name="curiosities">Curiosities</string>
+    <string name="revenue">Revenue</string>
+    <string name="orig_language">Orig. Language</string>
+    <string name="popularity">Popularity</string>
+    <string name="vote_average">Vote Average</string>
+    <string name="vote_count">Vote Count</string>
+    <string name="videos">Videos</string>
+    <string name="similar">Similar</string>
 </resources>

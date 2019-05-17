@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.levez.d2u.moviestmdbviewer.Models.api.responses.BaseResponse;
+import com.levez.d2u.moviestmdbviewer.Models.api.responses.VideoResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,9 @@ public class TvSeries extends Cinematographic implements Parcelable {
     @Expose
     private String firstAirDate;
 
-
+    @SerializedName("similar")
+    @Expose
+    private BaseResponse<TvSeries> similarResponse;
 
     public final static Parcelable.Creator<TvSeries> CREATOR = new Creator<TvSeries>() {
 
@@ -48,6 +52,11 @@ public class TvSeries extends Cinematographic implements Parcelable {
         this.name = ((String) in.readValue((String.class.getClassLoader())));
         this.firstAirDate = ((String) in.readValue((String.class.getClassLoader())));
         in.readList(this.originCountry, (java.lang.String.class.getClassLoader()));
+        if (in.readByte() == 0x01) {
+            similarResponse = in.readParcelable(VideoResponse.class.getClassLoader());
+        } else {
+            similarResponse = null;
+        }
     }
 
     public String getOriginalName() {
@@ -83,11 +92,30 @@ public class TvSeries extends Cinematographic implements Parcelable {
         this.originCountry = originCountry;
     }
 
+    public List<TvSeries> getSimilar() {
+        return similarResponse!=null?similarResponse.getResults(): new ArrayList<>();
+    }
+
+    public void setSimilar(List<TvSeries> similar) {
+        if(similarResponse!=null){
+            similarResponse.setResults(similar);
+        }else{
+            similarResponse = new BaseResponse<>();
+            similarResponse.setResults(similar);
+        }
+    }
+
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(originalName);
         dest.writeValue(name);
         dest.writeValue(firstAirDate);
         dest.writeList(originCountry);
+        if (similarResponse == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeParcelable(similarResponse, flags);
+        }
     }
 
     public int describeContents() {

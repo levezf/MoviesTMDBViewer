@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp">
+
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_backdrop"
+                android:layout_width="match_parent"
+                android:layout_height="250dp" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:backgroundTint="@android:color/transparent"
+                app:elevation="4dp"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <!--title-->
+            <include layout="@layout/card_details_title"/>
+
+            <!--Genre-->
+            <include layout="@layout/card_details_genres"/>
+
+            <!--Country-->
+            <include layout="@layout/card_details_country"/>
+
+            <!--Companies-->
+            <include layout="@layout/card_details_companies"/>
+
+            <!--Curiosities-->
+            <include layout="@layout/card_details_curiosities"/>
+
+            <!--Videos-->
+            <include layout="@layout/card_details_videos"/>
+
+            <!--Credits-->
+            <include layout="@layout/card_details_credits"/>
+
+            <!--Similar-->
+            <include layout="@layout/card_details_similar"/>
+
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</androidx.core.widget.NestedScrollView>
