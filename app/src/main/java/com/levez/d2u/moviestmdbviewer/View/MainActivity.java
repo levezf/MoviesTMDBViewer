@@ -34,6 +34,8 @@ public class MainActivity extends DaggerAppCompatActivity implements BottomNavig
     private Bundle mSavedInstanceState;
     private final static int REQUEST_CODE_ASK_PERMISSIONS = 1;
     private static final String[] REQUIRED_SDK_PERMISSIONS = new String[] {Manifest.permission.INTERNET};
+    private String mTagFrag;
+    private static final String EXTRA_TAG_FRAG = "tag_frag";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +95,17 @@ public class MainActivity extends DaggerAppCompatActivity implements BottomNavig
 
         if (mSavedInstanceState == null) {
             inflateFragment(CinematographicFragment.newInstance(Constant.TAG_TYPE_MOVIE),TAG_FRAG_MOVIE);
+        }else{
+            mTagFrag = mSavedInstanceState.getString(EXTRA_TAG_FRAG);
         }
     }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(EXTRA_TAG_FRAG, mTagFrag);
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -136,16 +146,16 @@ public class MainActivity extends DaggerAppCompatActivity implements BottomNavig
     public void inflateFragment(Fragment fragment, String tag){
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment);
-        if(fragment instanceof DetailsCinematographicFragment){
+        if(!(fragment instanceof CinematographicFragment)){
 
-            if(tag.equals(Constant.TAG_FRAG_DETAILS_MOVIE)){
-                transaction.addToBackStack(TAG_FRAG_MOVIE);
-            }
-
+            transaction.addToBackStack(mTagFrag);
         }
 
 
         transaction.commit();
+
+        mTagFrag = tag;
+
 
     }
 }

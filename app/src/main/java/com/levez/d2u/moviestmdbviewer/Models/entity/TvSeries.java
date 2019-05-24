@@ -34,6 +34,10 @@ public class TvSeries extends Cinematographic implements Parcelable {
     @Expose
     private BaseResponse<TvSeries> similarResponse;
 
+    @SerializedName("seasons")
+    @Expose
+    private List<Season> seasons = new ArrayList<>();
+
     public final static Parcelable.Creator<TvSeries> CREATOR = new Creator<TvSeries>() {
 
         public TvSeries createFromParcel(Parcel in) {
@@ -57,6 +61,7 @@ public class TvSeries extends Cinematographic implements Parcelable {
         } else {
             similarResponse = null;
         }
+        in.readList(seasons,Season.class.getClassLoader());
     }
 
     public String getOriginalName() {
@@ -96,6 +101,14 @@ public class TvSeries extends Cinematographic implements Parcelable {
         return similarResponse!=null?similarResponse.getResults(): new ArrayList<>();
     }
 
+    public List<Season> getSeasons() {
+        return seasons;
+    }
+
+    public void setSeasons(List<Season> seasons) {
+        this.seasons = seasons;
+    }
+
     public void setSimilar(List<TvSeries> similar) {
         if(similarResponse!=null){
             similarResponse.setResults(similar);
@@ -116,6 +129,7 @@ public class TvSeries extends Cinematographic implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeParcelable(similarResponse, flags);
         }
+        dest.writeList(seasons);
     }
 
     public int describeContents() {

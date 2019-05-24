@@ -2,6 +2,7 @@ package com.levez.d2u.moviestmdbviewer.Models.api;
 
 import com.levez.d2u.moviestmdbviewer.Models.api.responses.BaseResponse;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
+import com.levez.d2u.moviestmdbviewer.Models.entity.Season;
 import com.levez.d2u.moviestmdbviewer.Models.entity.TvSeries;
 
 import io.reactivex.Observable;
@@ -37,11 +38,6 @@ public interface CinematographicService {
             @Query("language") String language,
             @Query("append_to_response") String append);
 
-    @GET("movie/{id}")
-    Observable<Movie> getDetailsMovie(
-            @Path("id") int id,
-            @Query("api_key") String apiKey,
-            @Query("language") String language);
 
 
     /*-------------------TV Series----------------------*/
@@ -61,5 +57,17 @@ public interface CinematographicService {
             @Query("language") String language,
             @Query("page") int page);
 
+    @GET("tv/{id}")
+    Observable<TvSeries> getDetailsTvSeries(
+            @Path("id") int id,
+            @Query("api_key") String apiKey,
+            @Query("language") String language,
+            @Query("append_to_response") String append);
 
+    @GET("tv/{idSerie}/season/{season_number}")
+    Observable<Season> getSeasonAndEpisodes(
+            @Path("idSerie") int idSerie,
+            @Path("season_number") int seasonNumber,
+            @Query("api_key") String apiKey,
+            @Query("language") String language);
 }

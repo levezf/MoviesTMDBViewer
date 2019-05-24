@@ -10,7 +10,8 @@ public class Constant {
 
     static final String BASE_URL = "https://api.themoviedb.org/3/";
     public static final String API_KEY = "8ae03112f333d6386161cffe6268c009";
-    public static final String APPEND_RESPONSE_DEFAULT = "videos,similar,credits";
+    public static final String APPEND_RESPONSE_CINEMATOGRAPHIC_DEFAULT = "videos,similar,credits";
+    public static final String APPEND_RESPONSE_PEOPLE_DEFAULT = "tv_credits,movie_credits";
 
     public static final String LANGUAGE = "en-US";
 
@@ -30,10 +31,11 @@ public class Constant {
     public static final boolean INCLUDE_ADULT = false;
 
 
-
     public static final String TAG_FRAG_DETAILS_MOVIE = "tag_fragment_details_movie";
     public static final String TAG_FRAG_MOVIE = "tag_fragment_movies";
     public static final String TAG_FRAG_SEARCH = "tag_fragment_search";
     public static final String TAG_FRAG_TV_SERIES = "tag_fragment_tv_series";
     public static final String TAG_FRAG_FAVORITES = "tag_fragment_favorites";
+    public static final String TAG_FRAG_DETAILS_PEOPLE = "tag_fragment_details_people";
+
 }

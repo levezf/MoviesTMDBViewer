@@ -1,5 +1,6 @@
 package com.levez.d2u.moviestmdbviewer.Adapter;
 
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,10 +143,12 @@ public class ListSearchAdapter  extends  RecyclerView.Adapter<RecyclerView.ViewH
 
         }
 
-        holder.rb_popularity.setRating(c.getPopularity().floatValue());
+        holder.rb_popularity.setRating(((float)(c.getVoteAverage()/2)));
 
         holder.rb_popularity.setStepSize(0.01f);
         holder.rb_popularity.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> { });
+        holder.rb_popularity.getProgressDrawable()
+                .setColorFilter(holder.itemView.getResources().getColor(R.color.colorYellow), PorterDuff.Mode.SRC_IN);
         holder.rb_popularity.invalidate();
 
         Glide

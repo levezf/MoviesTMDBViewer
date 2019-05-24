@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/component_toolbar_with_image"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/card_title">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_marginTop="200dp"
+                    android:id="@+id/card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="1dp"
+                    app:cardUseCompatPadding="true">
+
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="70dp"
+                            android:layout_marginTop="10dp"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_marginTop="10dp"
+                            android:id="@+id/tv_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorYellow"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textAlignment="textEnd"
+                            android:gravity="end"
+                            tools:text="2019-01-03 - 2019-01-03" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_biography"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:textSize="15sp" />
+
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:id="@+id/view_helper"
+                    android:layout_width="48dp"
+                    app:backgroundTint="@android:color/transparent"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="40dp"
+                    app:layout_anchor="@+id/card"
+                    app:layout_anchorGravity="top|end"
+                    />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    style="@style/Widget.MaterialComponents.FloatingActionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_favorite_border_white_24dp"
+                    app:fabSize="normal"
+                    app:layout_anchor="@id/view_helper"
+                    app:layout_anchorGravity="bottom|center" />
+
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+            <include layout="@layout/card_details_similar" android:id="@+id/card_movies_credit"/>
+            <include layout="@layout/card_details_similar" android:id="@+id/card_tvseries_credit"/>
+
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</androidx.core.widget.NestedScrollView>

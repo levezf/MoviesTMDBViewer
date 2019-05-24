@@ -174,7 +174,7 @@ public class CinematographicFragment extends Fragment {
             if(getActivity()!=null){
                 ((MainActivity) getActivity())
                         .inflateFragment(
-                                DetailsCinematographicFragment.newInstance(adapter.get(position).getId()), Constant.TAG_FRAG_DETAILS_MOVIE);
+                                DetailsCinematographicFragment.newInstance(adapter.get(position).getId(), mTagType), Constant.TAG_FRAG_DETAILS_MOVIE + adapter.get(position).getId());
             }
         });
 
@@ -187,7 +187,7 @@ public class CinematographicFragment extends Fragment {
             if(ts ==null|| ts.isEmpty()){
                 mAdapter.showProgress(tag);
             }else{
-                mAdapter.hideProgress(tag, ts);
+                mAdapter.hideProgress(tag);
                 adapter.insertItems(ts);
             }
 

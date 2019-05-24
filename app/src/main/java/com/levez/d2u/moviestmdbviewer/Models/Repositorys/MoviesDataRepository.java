@@ -69,6 +69,6 @@ public class MoviesDataRepository extends CinematographicDataRepository<Movie> {
                 RetrofitConfig.getCinematographicService().getDetailsMovie(id,
                         Constant.API_KEY,
                         Constant.LANGUAGE,
-                        Constant.APPEND_RESPONSE_DEFAULT));
+                        Constant.APPEND_RESPONSE_CINEMATOGRAPHIC_DEFAULT));
     }
 }

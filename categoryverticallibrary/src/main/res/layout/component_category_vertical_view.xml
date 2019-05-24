@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:category_vertical="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_header"
+        android:background="@color/colorGray"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_height="match_parent"
+            tools:text="Season 1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"
+            category_vertical:layout_constraintBottom_toBottomOf="parent"
+            category_vertical:layout_constraintEnd_toStartOf="@+id/card_image"
+            category_vertical:layout_constraintStart_toStartOf="parent"
+            category_vertical:layout_constraintTop_toTopOf="parent" />
+
+<!--
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/btnCheckAll"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+            android:button="@drawable/button_check"
+            android:checked="true"
+            category_vertical:layout_constraintBottom_toBottomOf="parent"
+            category_vertical:layout_constraintEnd_toStartOf="@+id/card_image"
+            category_vertical:layout_constraintTop_toTopOf="parent" />-->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_image"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:padding="12dp"
+            category_vertical:cardBackgroundColor="@color/colorGray"
+            category_vertical:cardCornerRadius="20dp"
+            category_vertical:cardElevation="0dp"
+            category_vertical:layout_constraintBottom_toBottomOf="parent"
+            category_vertical:layout_constraintEnd_toEndOf="parent"
+            category_vertical:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/btn_expand"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_keyboard_arrow_down_white_24dp" />
+
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/container_child"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            tools:visibility="visible" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+    </FrameLayout>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

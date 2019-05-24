@@ -23,10 +23,6 @@ android {
 
 }
 
-ext {
-    constraintVersion = "1.1.3"
-    androidSupport = "28.0.0"
-}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

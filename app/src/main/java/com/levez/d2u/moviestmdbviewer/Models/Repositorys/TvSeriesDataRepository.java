@@ -1,17 +1,25 @@
 package com.levez.d2u.moviestmdbviewer.Models.Repositorys;
 
-import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
 import com.levez.d2u.moviestmdbviewer.Models.api.RetrofitConfig;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Genre;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
 import com.levez.d2u.moviestmdbviewer.Models.entity.MutableListMap;
+import com.levez.d2u.moviestmdbviewer.Models.entity.Season;
 import com.levez.d2u.moviestmdbviewer.Models.entity.TvSeries;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class TvSeriesDataRepository extends CinematographicDataRepository<TvSeries> {
 
@@ -44,6 +52,7 @@ public class TvSeriesDataRepository extends CinematographicDataRepository<TvSeri
         //noinspection ConstantConditions
         mLiveDatas.get(genre.getName()).initLiveData();
 
+        //noinspection unchecked
         return getCinematographic(
                 RetrofitConfig
                         .getCinematographicService()
@@ -56,12 +65,8 @@ public class TvSeriesDataRepository extends CinematographicDataRepository<TvSeri
         );
     }
 
-    @Override
-    public LiveData<TvSeries> getById(int id) {
-        return null;
-    }
-
     private LiveData<List<TvSeries>> getSeries(String TAG, String sortBy, int page){
+        //noinspection unchecked
         return getCinematographic(
                 RetrofitConfig.getCinematographicService().getSeries(Constant.API_KEY,
                         sortBy,
@@ -70,7 +75,65 @@ public class TvSeriesDataRepository extends CinematographicDataRepository<TvSeri
                 mLiveDatas.get(TAG));
     }
 
-   /* @Override
+
+    public LiveData<Season> getEpisodesBySeason(final int idSerie, final int numSeason){
+
+        MutableLiveData<Season> liveData = new MutableLiveData<>();
+
+        mCompositeDisposable.add(
+                RetrofitConfig
+                        .getCinematographicService()
+                        .getSeasonAndEpisodes(idSerie, numSeason, Constant.API_KEY, Constant.LANGUAGE)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .retryWhen((Observable<Throwable> errors) -> {
+                            errors.subscribe(new DisposableObserver<Throwable>() {
+                                @Override
+                                public void onNext(Throwable throwable) {
+                                    Log.e("TAGG", "ERROR: " + throwable.getMessage());
+
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+
+                                }
+
+                                @Override
+                                public void onComplete() {
+
+                                }
+                            });
+
+                            return errors.flatMap(error -> Observable.timer(2, TimeUnit.SECONDS));
+                        })
+                        .subscribeWith(new DisposableObserver<Season>() {
+
+                            Season s;
+
+                            @Override
+                            public void onNext(Season season) {
+                                s = season;
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                                liveData.postValue(s);
+                            }
+                        })
+        );
+        return liveData;
+    }
+
+
+
+    @Override
     public LiveData<TvSeries> getById(int id) {
 
         mLiveDatas.put(String.valueOf(id), new MutableListMap());
@@ -78,7 +141,7 @@ public class TvSeriesDataRepository extends CinematographicDataRepository<TvSeri
         mLiveDatas.get(String.valueOf(id)).initLiveData();
 
         return getDetailsCinematographic(
-                RetrofitConfig.getCinematographicService().getDetailsMovie(id, Constant.API_KEY, Constant.LANGUAGE,
-                        Constant.APPEND_RESPONSE_DEFAULT));
-    }*/
+                RetrofitConfig.getCinematographicService().getDetailsTvSeries(id, Constant.API_KEY, Constant.LANGUAGE,
+                        Constant.APPEND_RESPONSE_CINEMATOGRAPHIC_DEFAULT));
+    }
 }

@@ -1,34 +1,23 @@
 package com.levez.d2u.moviestmdbviewer.ViewModels;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.levez.d2u.moviestmdbviewer.Models.Repositorys.CinematographicDataRepository;
-import com.levez.d2u.moviestmdbviewer.Models.Repositorys.GenresDataRepository;
-import com.levez.d2u.moviestmdbviewer.Models.Repositorys.MoviesDataRepository;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Genre;
+import com.levez.d2u.moviestmdbviewer.Models.Repositorys.TvSeriesDataRepository;
+import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
+import com.levez.d2u.moviestmdbviewer.Models.entity.Season;
 
-import java.util.List;
+public class DetailsCinematographicViewModel extends CineViewModel {
 
-public class DetailsCinematographicViewModel extends ViewModel {
 
-    private CinematographicDataRepository<Movie> mRepository;
+    public DetailsCinematographicViewModel() { }
 
-    public DetailsCinematographicViewModel() {
-        mRepository = new MoviesDataRepository();
-    }
-
-    public LiveData<Movie> getDetails(int id) {
+    public LiveData<Cinematographic> getDetails(int id) {
         return mRepository.getById(id);
     }
 
-    public void clear(){
-        if(mRepository!=null)
-            mRepository.clear();
-    }
-    public void dispose(){
-        if(mRepository!=null)
-            mRepository.dispose();
+    public LiveData<Season> getSeasonsAndEpisodes(Integer idSerie, Integer seasonNumber) {
+        return ((TvSeriesDataRepository)mRepository).getEpisodesBySeason(idSerie, seasonNumber);
     }
 }

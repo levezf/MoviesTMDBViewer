@@ -35,7 +35,7 @@ public class Team implements Parcelable {
         this.gender = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.name = ((String) in.readValue((String.class.getClassLoader())));
-        this.profilePath = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.profilePath = in.readValue((Object.class.getClassLoader()));
     }
 
     public static final Creator<Team> CREATOR = new Creator<Team>() {

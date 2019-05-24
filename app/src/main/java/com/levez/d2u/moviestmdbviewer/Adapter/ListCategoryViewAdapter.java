@@ -70,13 +70,12 @@ public class ListCategoryViewAdapter  extends RecyclerView.Adapter<ListCategoryV
         notifyItemChanged(index);
     }
 
-    public void hideProgress(String tag, List<Cinematographic> cs) {
-
+    public void hideProgress(String tag) {
 
         if(!mTags.isEmpty()) {
 
             int index = mTags.indexOf(tag);
-            if(index!=-1) {
+            if(index!=-1 && (mCategories.get(index).getAdapter().getItemCount()==0)) {
                 mCategories.get(index).hideProgress();
                 notifyItemChanged(index);
             }

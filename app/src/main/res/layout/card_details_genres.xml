@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
-    android:id="@+id/card2"
+    android:id="@+id/card_genres"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:layout_marginTop="10dp"
+    android:layout_margin="4dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="1dp"
     app:cardUseCompatPadding="true"
