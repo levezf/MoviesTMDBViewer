@@ -129,15 +129,20 @@ public class DetailsCinematographicFragment extends Fragment {
         }
         mToolbar.setNavigationOnClickListener(view -> getActivity().getSupportFragmentManager().popBackStack());
 
-        if(mTagType.equals(Constant.TAG_TYPE_TV_SERIES)) {
-            mBottomSheetBehaviorSeason = BottomSheetBehavior.from(mView.findViewById(R.id.bottom_sheet));
-            mBottomSheetBehaviorSeason.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            mBottomSheetBehaviorSeason.setPeekHeight(0);
-            mBottomSheetBehaviorSeason.setHideable(true);
-        }
+        mBottomSheetBehaviorSeason = setupBottomSheet(R.id.bottom_sheet_seasons);
+        mBottomSheetBehaviorEpisode = setupBottomSheet(R.id.bottom_sheet_episodes);
+
 
 
         return mView;
+    }
+
+    private BottomSheetBehavior setupBottomSheet(@IdRes int id) {
+        BottomSheetBehavior bottomSheet = BottomSheetBehavior.from(mView.findViewById(id));
+        bottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheet.setPeekHeight(0);
+        bottomSheet.setHideable(true);
+        return bottomSheet;
     }
 
     @Override
@@ -167,6 +172,8 @@ public class DetailsCinematographicFragment extends Fragment {
             setRecyclerView(R.id.rv_p_country, R.id.card_country, ((Movie) c).getProductionCountries());
             setRecyclerView(R.id.rv_similar, R.id.card_similar, ((Movie) c).getSimilar());
 
+            mBottomSheetBehaviorSeason.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            mBottomSheetBehaviorEpisode.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }else{
 
             setText(R.id.tv_title, ((TvSeries) c).getName());
@@ -175,7 +182,6 @@ public class DetailsCinematographicFragment extends Fragment {
 
             mView.findViewById(R.id.group_revenue).setVisibility(View.GONE);
 
-
             setRecyclerView(R.id.rv_p_country, R.id.card_country,  ((TvSeries) c).getOriginCountry());
             setRecyclerView(R.id.rv_similar, R.id.card_similar, ((TvSeries) c).getSimilar());
 
@@ -183,14 +189,12 @@ public class DetailsCinematographicFragment extends Fragment {
             mView.findViewById(R.id.open_image).getBackground().setColorFilter(color.getDefaultColor(), PorterDuff.Mode.SRC_IN);
             mView.findViewById(R.id.exit_image_bottom_sheet).getBackground().setColorFilter(color.getDefaultColor(), PorterDuff.Mode.SRC_IN);
 
+            mView.findViewById(R.id.card_see_seasons).setVisibility(View.VISIBLE);
             mView.findViewById(R.id.card_see_seasons).setOnClickListener(v -> mBottomSheetBehaviorSeason.setState(BottomSheetBehavior.STATE_HALF_EXPANDED));
             mView.findViewById(R.id.card_exit_season).setOnClickListener(v -> mBottomSheetBehaviorSeason.setState(BottomSheetBehavior.STATE_COLLAPSED));
+            mView.findViewById(R.id.card_exit_episode).setOnClickListener(v -> mBottomSheetBehaviorEpisode.setState(BottomSheetBehavior.STATE_COLLAPSED));
 
-
-            setupBottomSheetEpisodes();
             setupBottomSheetSeasons();
-
-
         }
 
         setText(R.id.tv_overview, c.getOverview());
@@ -231,9 +235,11 @@ public class DetailsCinematographicFragment extends Fragment {
 
     private void setupBottomSheetEpisodes() {
 
-        RecyclerView mListSeasons  = mView.findViewById(R.id.rv_episodes);
-        mListSeasons.setHasFixedSize(true);
-        mListSeasons.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        RecyclerView mListEpisodes  = mView.findViewById(R.id.rv_episodes);
+        mListEpisodes.setHasFixedSize(true);
+        mListEpisodes.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        mListEpisodes.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getContext()), RecyclerView.VERTICAL));
+        mListEpisodes.setAdapter(mAdapterEpisodesBottomSheet);
     }
 
     private void setupBottomSheetSeasons() {
@@ -244,18 +250,15 @@ public class DetailsCinematographicFragment extends Fragment {
 
 
         mAdapterSeasonsBottomSheet = new SeasonsAdapter(((TvSeries) mCinematographic).getSeasons());
-        mAdapterSeasonsBottomSheet.setOnItemClickListener((v, position) -> {
-
-            expandBottomSheetEpisodes();
-
-            mViewModel.getSeasonsAndEpisodes(mCinematographic.getId(),
-                    (((TvSeries) mCinematographic)).getSeasons().get(position).getSeasonNumber())
-                    .observe(
-                            DetailsCinematographicFragment.this, season -> {
-                                ((TvSeries) mCinematographic).getSeasons().set(position, season);
-                                mAdapterEpisodesBottomSheet = new EpisodesAdapter(season.getEpisodes());
-                            });
-        });
+        mAdapterSeasonsBottomSheet.setOnItemClickListener((v, position) -> mViewModel.getSeasonsAndEpisodes(mCinematographic.getId(),
+                (((TvSeries) mCinematographic)).getSeasons().get(position).getSeasonNumber())
+                .observe(
+                        DetailsCinematographicFragment.this, season -> {
+                            ((TvSeries) mCinematographic).getSeasons().set(position, season);
+                            mAdapterEpisodesBottomSheet = new EpisodesAdapter(season.getEpisodes());
+                            setupBottomSheetEpisodes();
+                            expandBottomSheetEpisodes();
+                        }));
 
         mListSeasons.setAdapter(mAdapterSeasonsBottomSheet);
 

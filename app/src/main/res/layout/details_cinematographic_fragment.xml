@@ -57,8 +57,8 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <include layout="@layout/bottom_sheet_seasons" android:id="bs_season"/>
+    <include layout="@layout/bottom_sheet_seasons" />
 
-    <include layout="@layout/bottom_sheet_seasons" android:id="bs_episode"/>
+    <include layout="@layout/bottom_sheet_episodes" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
