@@ -34,6 +34,7 @@ ext {
     rxAndroidVersion = "2.2.8"
     adapterRxJavaVersion = "2.4.0"
     okhttp3LoggingVersion = "3.14.1"
+    room_version = "2.1.0-rc01"
 }
 
 dependencies {
@@ -71,4 +72,10 @@ dependencies {
     implementation project(path: ':categoryhorizontallibrary')
     implementation 'com.google.android.material:material:1.0.0'
     implementation project(path: ':searchlibrary')
+
+
+
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
 }

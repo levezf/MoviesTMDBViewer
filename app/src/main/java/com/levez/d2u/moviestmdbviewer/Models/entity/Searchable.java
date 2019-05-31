@@ -1,4 +1,9 @@
 package com.levez.d2u.moviestmdbviewer.Models.entity;
 
-public abstract class Searchable {
+import android.os.Parcelable;
+
+public abstract class Searchable implements Parcelable {
+
+    public Searchable() {
+    }
 }

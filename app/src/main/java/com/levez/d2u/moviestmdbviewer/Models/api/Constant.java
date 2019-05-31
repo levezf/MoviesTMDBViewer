@@ -7,6 +7,9 @@ public class Constant {
 
     public static final String SITE_VIDEOS = "YouTube";
 
+    public static final String DATABASE_NAME = "database_closeup";
+    public static final int DATABASE_VERSION = 1;
+
 
     static final String BASE_URL = "https://api.themoviedb.org/3/";
     public static final String API_KEY = "8ae03112f333d6386161cffe6268c009";
@@ -25,13 +28,15 @@ public class Constant {
     public static final String FAVORITES = "Favorites";
 
     public static final String TAG_TYPE_TV_SERIES = "tv";
+    public static final String TAG_TYPE_EPISODE = "episode";
+
     public static final String TAG_TYPE_MOVIE = "movie";
     public static final String TAG_TYPE_PEOPLE = "person";
 
     public static final boolean INCLUDE_ADULT = false;
 
 
-    public static final String TAG_FRAG_DETAILS_MOVIE = "tag_fragment_details_movie";
+    public static final String TAG_FRAG_DETAILS_CINEMATOGRAPHIC = "tag_fragment_details_cinematographic";
     public static final String TAG_FRAG_MOVIE = "tag_fragment_movies";
     public static final String TAG_FRAG_SEARCH = "tag_fragment_search";
     public static final String TAG_FRAG_TV_SERIES = "tag_fragment_tv_series";

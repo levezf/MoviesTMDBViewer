@@ -14,7 +14,7 @@ public class ProductionCompany implements Parcelable
 
     @SerializedName("logo_path")
     @Expose
-    private Object logoPath;
+    private String logoPath;
 
     @SerializedName("name")
     @Expose
@@ -39,7 +39,7 @@ public class ProductionCompany implements Parcelable
 
     private ProductionCompany(Parcel in) {
         this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        this.logoPath = in.readValue((Object.class.getClassLoader()));
+        this.logoPath = (String) in.readValue((Object.class.getClassLoader()));
         this.name = ((String) in.readValue((String.class.getClassLoader())));
         this.originCountry = ((String) in.readValue((String.class.getClassLoader())));
     }
@@ -55,11 +55,11 @@ public class ProductionCompany implements Parcelable
         this.id = id;
     }
 
-    public Object getLogoPath() {
+    public String getLogoPath() {
         return logoPath;
     }
 
-    public void setLogoPath(Object logoPath) {
+    public void setLogoPath(String logoPath) {
         this.logoPath = logoPath;
     }
 

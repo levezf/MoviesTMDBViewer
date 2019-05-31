@@ -3,6 +3,9 @@ package com.levez.d2u.moviestmdbviewer.Models.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.levez.d2u.moviestmdbviewer.Models.api.responses.BaseResponse;
@@ -11,31 +14,37 @@ import com.levez.d2u.moviestmdbviewer.Models.api.responses.VideoResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Entity
 public class TvSeries extends Cinematographic implements Parcelable {
 
     @SerializedName("original_name")
     @Expose
+    @Ignore
     private String originalName;
 
     @SerializedName("name")
     @Expose
+    @Ignore
     private String name;
 
     @SerializedName("origin_country")
     @Expose
+    @Ignore
     private List<String> originCountry = new ArrayList<>();
 
     @SerializedName("first_air_date")
     @Expose
+    @Ignore
     private String firstAirDate;
 
     @SerializedName("similar")
     @Expose
+    @Ignore
     private BaseResponse<TvSeries> similarResponse;
 
     @SerializedName("seasons")
     @Expose
+    @Ignore
     private List<Season> seasons = new ArrayList<>();
 
     public final static Parcelable.Creator<TvSeries> CREATOR = new Creator<TvSeries>() {
@@ -50,6 +59,10 @@ public class TvSeries extends Cinematographic implements Parcelable {
 
     };
 
+    public TvSeries() {
+    }
+
+    @Ignore
     private TvSeries(Parcel in) {
         super(in);
         this.originalName = ((String) in.readValue((String.class.getClassLoader())));

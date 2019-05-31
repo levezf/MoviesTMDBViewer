@@ -1,6 +1,8 @@
 package com.levez.d2u.moviestmdbviewer.Dependency;
 
 import com.levez.d2u.moviestmdbviewer.View.CinematographicFragment;
+import com.levez.d2u.moviestmdbviewer.View.DetailsCinematographicFragment;
+import com.levez.d2u.moviestmdbviewer.View.DetailsPeopleFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -10,5 +12,11 @@ public abstract class FragmentBuilder {
 
     @ContributesAndroidInjector
     abstract CinematographicFragment contributeCinematographicFragment();
+
+    @ContributesAndroidInjector
+    abstract DetailsCinematographicFragment contributeDetailsCinematographicFragment();
+
+    @ContributesAndroidInjector
+    abstract DetailsPeopleFragment contributeDetailsPeopleFragment();
 
 }

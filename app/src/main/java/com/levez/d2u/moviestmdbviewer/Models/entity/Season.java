@@ -17,21 +17,27 @@ public class Season implements Parcelable
     @SerializedName("air_date")
     @Expose
     private String airDate;
+
     @SerializedName("episode_count")
     @Expose
     private Integer episodeCount;
+
     @SerializedName("id")
     @Expose
     private Integer id;
+
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("overview")
     @Expose
     private String overview;
+
     @SerializedName("poster_path")
     @Expose
     private String posterPath;
+
     @SerializedName("season_number")
     @Expose
     private Integer seasonNumber;

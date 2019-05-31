@@ -1,7 +1,10 @@
 package com.levez.d2u.moviestmdbviewer.View;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.levez.d2u.moviestmdbviewer.Adapter.CinematographicListAdapter;
@@ -32,8 +37,10 @@ import com.levez.d2u.moviestmdbviewer.Adapter.OnItemClickListener;
 import com.levez.d2u.moviestmdbviewer.Adapter.SeasonsAdapter;
 import com.levez.d2u.moviestmdbviewer.Adapter.TagAdapter;
 import com.levez.d2u.moviestmdbviewer.Adapter.VideoAdapter;
+import com.levez.d2u.moviestmdbviewer.Dependency.DaggerViewModelFactory;
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
+import com.levez.d2u.moviestmdbviewer.Models.entity.Episode;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Genre;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
 import com.levez.d2u.moviestmdbviewer.Models.entity.ProductionCompany;
@@ -43,7 +50,9 @@ import com.levez.d2u.moviestmdbviewer.Models.entity.TvSeries;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Video;
 import com.levez.d2u.moviestmdbviewer.R;
 import com.levez.d2u.moviestmdbviewer.Utils.FormatNumberUtils;
+import com.levez.d2u.moviestmdbviewer.Utils.LayoutUtils;
 import com.levez.d2u.moviestmdbviewer.ViewModels.DetailsCinematographicViewModel;
+import com.levez.d2u.moviestmdbviewer.ViewModels.FavoriteViewModel;
 
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
@@ -51,6 +60,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 
 
 /*
@@ -63,7 +76,7 @@ import java.util.Objects;
  */
 
 
-public class DetailsCinematographicFragment extends Fragment {
+public class DetailsCinematographicFragment extends Fragment  implements View.OnClickListener {
 
 
     private static final String EXTRA_ID = "extra_id";
@@ -80,6 +93,9 @@ public class DetailsCinematographicFragment extends Fragment {
 
     private SeasonsAdapter mAdapterSeasonsBottomSheet;
     private EpisodesAdapter mAdapterEpisodesBottomSheet;
+    private FavoriteViewModel mFavoriteViewModel;
+    @Inject
+    DaggerViewModelFactory viewModelFactory;
 
 
     public static DetailsCinematographicFragment newInstance(int idCinematographic, String tagType) {
@@ -132,9 +148,14 @@ public class DetailsCinematographicFragment extends Fragment {
         mBottomSheetBehaviorSeason = setupBottomSheet(R.id.bottom_sheet_seasons);
         mBottomSheetBehaviorEpisode = setupBottomSheet(R.id.bottom_sheet_episodes);
 
-
+        showProgress(true);
 
         return mView;
+    }
+
+    private void showProgress(boolean show) {
+        mView.findViewById(R.id.progress).setVisibility((show)?View.VISIBLE:View.GONE);
+        mView.findViewById(R.id.view_layout).setVisibility((!show)?View.VISIBLE:View.GONE);
     }
 
     private BottomSheetBehavior setupBottomSheet(@IdRes int id) {
@@ -148,6 +169,7 @@ public class DetailsCinematographicFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        AndroidSupportInjection.inject(this);
 
         mViewModel = ViewModelProviders.of(this).get(DetailsCinematographicViewModel.class);
         mViewModel.onAttachTagType(mTagType);
@@ -158,11 +180,31 @@ public class DetailsCinematographicFragment extends Fragment {
             bindFindViewById(mCinematographic);
         }
 
+        mFavoriteViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteViewModel.class);
+
+
+
+
     }
 
     private void bindFindViewById(Cinematographic c) {
 
         mCinematographic = c;
+
+
+        FloatingActionButton fab = mView.findViewById(R.id.btn_favorite);
+
+
+        mFavoriteViewModel.getIdsFavorites(mTagType, getContext()).observe(this, integers -> {
+            if(integers.contains(mCinematographic.getId())){
+                mCinematographic.setFavorite(true);
+                LayoutUtils.markFavorite(getContext(), fab);
+            }else{
+                mCinematographic.setFavorite(false);
+                LayoutUtils.clearFavorite(getContext(), fab);
+            }
+        });
+        fab.setOnClickListener(this);
 
         if(c instanceof Movie){
 
@@ -175,6 +217,10 @@ public class DetailsCinematographicFragment extends Fragment {
             mBottomSheetBehaviorSeason.setState(BottomSheetBehavior.STATE_COLLAPSED);
             mBottomSheetBehaviorEpisode.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }else{
+
+
+            /*TODO Fazer o watched dos episode*/
+
 
             setText(R.id.tv_title, ((TvSeries) c).getName());
             setText(R.id.tv_date_release, ((TvSeries) c).getFirstAirDate());
@@ -229,7 +275,7 @@ public class DetailsCinematographicFragment extends Fragment {
                 .centerCrop()
                 .into(((AppCompatImageView) mView.findViewById(R.id.iv_backdrop)));
 
-
+        showProgress(false);
 
     }
 
@@ -255,7 +301,29 @@ public class DetailsCinematographicFragment extends Fragment {
                 .observe(
                         DetailsCinematographicFragment.this, season -> {
                             ((TvSeries) mCinematographic).getSeasons().set(position, season);
+
+
+/*
+                            mFavoriteViewModel.getIdsFavorites(Constant.TAG_TYPE_EPISODE, getContext()).observe(this, integers -> {
+
+                                for (int i = 0; i < season.getEpisodes().size(); i++) {
+
+                                    if(integers.contains(season.getEpisodes().get(i).getId())) {
+                                        season.getEpisodes().get(i).setWatched(true);
+                                        mAdapterEpisodesBottomSheet.notifyItemChanged(i);
+                                    }
+                                }
+
+                            });*/
                             mAdapterEpisodesBottomSheet = new EpisodesAdapter(season.getEpisodes());
+/*
+                            mAdapterEpisodesBottomSheet.setOnItemChangeState((isCheked, view, i) -> {
+                                if(isCheked){
+                                    mFavoriteViewModel.insertFavorite(getContext(), season.getEpisodes().get(i));
+                                }else{
+                                    mFavoriteViewModel.removeFavorite(getContext(), season.getEpisodes().get(i));
+                                }
+                            });*/
                             setupBottomSheetEpisodes();
                             expandBottomSheetEpisodes();
                         }));
@@ -308,7 +376,7 @@ public class DetailsCinematographicFragment extends Fragment {
 
                 int id = ((Team) data.get(position)).getId();
                 inflate(
-                        DetailsPeopleView.newInstance(id), Constant.TAG_FRAG_DETAILS_PEOPLE + id);
+                        DetailsPeopleFragment.newInstance(id), Constant.TAG_FRAG_DETAILS_PEOPLE + id);
 
             });
 
@@ -335,7 +403,7 @@ public class DetailsCinematographicFragment extends Fragment {
                 Fragment fragment= DetailsCinematographicFragment.newInstance(
                         id,
                         mTagType);
-                inflate(fragment, Constant.TAG_FRAG_DETAILS_MOVIE + id);
+                inflate(fragment, Constant.TAG_FRAG_DETAILS_CINEMATOGRAPHIC + id);
             });
 
 
@@ -349,7 +417,7 @@ public class DetailsCinematographicFragment extends Fragment {
             ((VideoAdapter) adapter).setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onClick(View v, int position) {
-
+                    openYouTube(mCinematographic.getVideos().get(position));
                 }
             });
             itemDecorator = new DividerItemDecoration(Objects.requireNonNull(getContext()),
@@ -365,6 +433,18 @@ public class DetailsCinematographicFragment extends Fragment {
         rv.addItemDecoration(itemDecorator);
 
         return true;
+    }
+
+    private void openYouTube(Video video) {
+        String id = video.getKey();
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+        try {
+            startActivity(appIntent);
+        } catch (ActivityNotFoundException ex) {
+            Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://www.youtube.com/watch?v=" + id));
+            startActivity(webIntent);
+        }
     }
 
 
@@ -403,8 +483,19 @@ public class DetailsCinematographicFragment extends Fragment {
     @Override
     public void onDestroy() {
         mViewModel.clear();
+        mFavoriteViewModel.clear();
         super.onDestroy();
     }
 
 
+    @Override
+    public void onClick(View v) {
+
+        if(mCinematographic.isFavorite()){
+            mFavoriteViewModel.removeFavorite(getContext(), mCinematographic);
+        }else{
+            mFavoriteViewModel.insertFavorite(getContext(), mCinematographic);
+        }
+
+    }
 }

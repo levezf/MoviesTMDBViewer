@@ -3,6 +3,9 @@ package com.levez.d2u.moviestmdbviewer.Models.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.levez.d2u.moviestmdbviewer.Models.api.responses.BaseResponse;
@@ -11,34 +14,42 @@ import com.levez.d2u.moviestmdbviewer.Models.api.responses.VideoResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Movie extends Cinematographic implements Parcelable {
 
     @SerializedName("video")
     @Expose
+    @Ignore
     private Boolean video;
 
     @SerializedName("title")
     @Expose
+    @Ignore
     private String title;
 
     @SerializedName("original_title")
     @Expose
+    @Ignore
     private String originalTitle;
 
     @SerializedName("adult")
     @Expose
+    @Ignore
     private Boolean adult;
 
     @SerializedName("release_date")
     @Expose
+    @Ignore
     private String releaseDate;
 
     @SerializedName("production_countries")
     @Expose
+    @Ignore
     private List<ProductionCountry> productionCountries;
 
     @SerializedName("similar")
     @Expose
+    @Ignore
     private BaseResponse<Movie> similarResponse;
 
     public Movie() {
@@ -105,6 +116,7 @@ public class Movie extends Cinematographic implements Parcelable {
         this.releaseDate = releaseDate;
     }
 
+    @Ignore
     private Movie(Parcel in) {
         super(in);
         byte videoVal = in.readByte();
@@ -163,16 +175,5 @@ public class Movie extends Cinematographic implements Parcelable {
         }
     }
 
-    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
 
 }

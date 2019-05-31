@@ -2,8 +2,14 @@ package com.levez.d2u.moviestmdbviewer.Models.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.room.Entity;
+import androidx.room.Ignore;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import retrofit2.internal.EverythingIsNonNull;
 
 public class Cast extends Team implements Parcelable
 {
@@ -11,6 +17,7 @@ public class Cast extends Team implements Parcelable
     @SerializedName("cast_id")
     @Expose
     private Integer castId;
+
     @SerializedName("character")
     @Expose
     private String character;
@@ -31,6 +38,10 @@ public class Cast extends Team implements Parcelable
         }
 
     };
+
+    public Cast() {
+        super();
+    }
 
     private Cast(Parcel in) {
         super(in);

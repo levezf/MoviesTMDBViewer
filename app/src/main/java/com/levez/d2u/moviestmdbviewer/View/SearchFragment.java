@@ -1,39 +1,47 @@
 package com.levez.d2u.moviestmdbviewer.View;
 
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.app.MediaRouteButton;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.levez.d2u.moviestmdbviewer.Adapter.ListSearchAdapter;
 import com.levez.d2u.moviestmdbviewer.Adapter.PaginationScrollListener;
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
+import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
+import com.levez.d2u.moviestmdbviewer.Models.entity.People;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Searchable;
 import com.levez.d2u.moviestmdbviewer.R;
 import com.levez.d2u.moviestmdbviewer.ViewModels.SearchViewModel;
 import com.levez.d2u.searchlibrary.SearchView;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Objects;
+
+/*
+*
+* TODO
+*  * Não perder os itens ao clicar
+*  * Bugando a paginação ao voltar
+*
+*/
+
 
 public class SearchFragment extends Fragment implements ListSearchAdapter.OnSearchItemClickListener {
 
 
+    private static final String EXTRA_LIST_SEARCH = "extra_list_searchable";
     private View mView;
     private SearchView mSearchView;
     private RecyclerView mList;
@@ -41,6 +49,7 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
     private ListSearchAdapter mAdapter;
     private AppCompatTextView mMessageHelper;
     private ProgressBar mProgress;
+    private ArrayList<Searchable> mSearchables = new ArrayList<>();
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -70,18 +79,31 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
         bindSearchView();
         bindSearchList();
 
-        mViewModel.getSearch().observe(this, searchables -> {
-            mProgress.setVisibility(View.GONE);
-            if((searchables==null || searchables.isEmpty()) && mAdapter.getItemCount()==0){
-                mMessageHelper.setText("Oops! We could not find any results for your search.");
-                mMessageHelper.setVisibility(View.VISIBLE);
-            }
-            mAdapter.refresh(searchables);
-        });
+        if (savedInstanceState != null) {
+            mSearchables = savedInstanceState.getParcelableArrayList(EXTRA_LIST_SEARCH);
+            if (mSearchables != null && mSearchables.isEmpty()) mAdapter.refresh(mSearchables);
+        }else{
+            mViewModel.getSearch().observe(this, searchables -> {
+                mProgress.setVisibility(View.GONE);
+                if((searchables==null || searchables.isEmpty()) && mAdapter.getItemCount()==0){
+                    mMessageHelper.setText("Oops! We could not find any results for your search.");
+                    mMessageHelper.setVisibility(View.VISIBLE);
+                }
+                assert searchables != null;
+                mSearchables.addAll(searchables);
+                mAdapter.refresh(searchables);
+            });
+        }
+
+    }
+
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
 
     }
 
@@ -145,16 +167,26 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
     }
 
     @Override
-    public void onClick(View v, int position, String tagType) {
-        if(tagType.equals(Constant.TAG_TYPE_MOVIE)){
+    public void onClick(View v, int position, Searchable searchable,String tagType) {
 
+        int id = -1;
 
-        }else if(tagType.equals(Constant.TAG_TYPE_TV_SERIES)){
+        switch (tagType){
 
+            case Constant.TAG_TYPE_PEOPLE:
+                id  = ((People) searchable).getId();
+                inflate(DetailsPeopleFragment.newInstance(id), Constant.TAG_FRAG_DETAILS_PEOPLE + id);
+                break;
 
-        }else{
-
-
+            case Constant.TAG_TYPE_MOVIE:
+            case Constant.TAG_TYPE_TV_SERIES:
+                id  = ((Cinematographic) searchable).getId();
+                inflate(DetailsCinematographicFragment.newInstance(id, tagType), Constant.TAG_FRAG_DETAILS_CINEMATOGRAPHIC + id);
+                break;
         }
+
+    }
+    private void inflate(Fragment fragment, String tag){
+        ((MainActivity) Objects.requireNonNull(getActivity())).inflateFragment(fragment, tag);
     }
 }

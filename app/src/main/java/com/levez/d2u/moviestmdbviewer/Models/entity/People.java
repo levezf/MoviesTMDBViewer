@@ -3,56 +3,93 @@ package com.levez.d2u.moviestmdbviewer.Models.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class People extends Searchable implements Parcelable
 {
     @SerializedName("birthday")
     @Expose
+    @Ignore
     private String birthday;
+
     @SerializedName("known_for_department")
     @Expose
+    @Ignore
     private String knownForDepartment;
+
     @SerializedName("id")
     @Expose
+    @PrimaryKey
     private Integer id;
+
     @SerializedName("movie_credits")
     @Expose
+    @Ignore
     private Participations<Movie> movieCredits;
+
     @SerializedName("profile_path")
     @Expose
+    @Ignore
     private String profilePath;
+
     @SerializedName("tv_credits")
     @Expose
+    @Ignore
     private Participations<TvSeries> tvCredits;
+
     @SerializedName("deathday")
     @Expose
+    @Ignore
     private String deathday;
+
     @SerializedName("name")
     @Expose
+    @Ignore
     private String name;
+
     @SerializedName("also_known_as")
     @Expose
+    @Ignore
     private List<String> alsoKnownAs = new ArrayList<>();
+
     @SerializedName("biography")
     @Expose
+    @Ignore
     private String biography;
+
     @SerializedName("adult")
     @Expose
+    @Ignore
     private Boolean adult;
+
     @SerializedName("gender")
     @Expose
+    @Ignore
     private Integer gender;
+
     @SerializedName("place_of_birth")
     @Expose
+    @Ignore
     private String placeOfBirth;
+
     @SerializedName("popularity")
     @Expose
+    @Ignore
     private Double popularity;
+
+    @Expose(deserialize = false, serialize = false)
+    @Ignore
+    private boolean favorite;
+
 
     public final static Parcelable.Creator<People> CREATOR = new Creator<People>() {
 
@@ -66,6 +103,7 @@ public class People extends Searchable implements Parcelable
 
     };
 
+    @Ignore
     protected People(Parcel in) {
         this.birthday = ((String) in.readValue((String.class.getClassLoader())));
         this.knownForDepartment = ((String) in.readValue((String.class.getClassLoader())));
@@ -81,6 +119,8 @@ public class People extends Searchable implements Parcelable
         this.gender = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.placeOfBirth = ( in.readString());
         this.popularity = ((Double) in.readValue((Double.class.getClassLoader())));
+        favorite = in.readByte() != 0x00;
+
     }
 
     public People() {
@@ -192,6 +232,13 @@ public class People extends Searchable implements Parcelable
         this.popularity = popularity;
     }
 
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(birthday);
@@ -208,6 +255,7 @@ public class People extends Searchable implements Parcelable
         dest.writeValue(gender);
         dest.writeValue(placeOfBirth);
         dest.writeValue(popularity);
+        dest.writeByte((byte) (favorite ? 0x01 : 0x00));
     }
 
     public int describeContents() {

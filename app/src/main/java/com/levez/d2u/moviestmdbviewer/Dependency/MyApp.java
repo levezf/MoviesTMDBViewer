@@ -27,7 +27,6 @@ public class MyApp extends Application implements HasActivityInjector
                 .application(this)
                 .appModule(new AppModule(this))
                 .build();
-
         appComponent.inject(this);
 //        DaggerGenreComponent.builder().build();
     }

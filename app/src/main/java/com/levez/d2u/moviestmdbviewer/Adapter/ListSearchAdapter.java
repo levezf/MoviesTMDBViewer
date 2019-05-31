@@ -28,7 +28,7 @@ public class ListSearchAdapter  extends  RecyclerView.Adapter<RecyclerView.ViewH
 
 
     public interface OnSearchItemClickListener {
-        void onClick(View v, int position, String tagType);
+        void onClick(View v, int position, Searchable searchable,String tagType);
     }
 
     private static final int MOVIE = 0;
@@ -253,7 +253,7 @@ public class ListSearchAdapter  extends  RecyclerView.Adapter<RecyclerView.ViewH
 
             itemView.setOnClickListener(v -> {
                 if(mListener!=null){
-                    mListener.onClick(itemView, position, mTagType);
+                    mListener.onClick(itemView, position, mSearchables.get(position),mTagType);
                 }
             });
 

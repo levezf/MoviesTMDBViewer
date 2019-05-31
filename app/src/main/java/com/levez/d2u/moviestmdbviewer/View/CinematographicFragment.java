@@ -7,8 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,11 +23,9 @@ import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Genre;
 import com.levez.d2u.moviestmdbviewer.R;
 import com.levez.d2u.moviestmdbviewer.ViewModels.CinematographicViewModel;
-import com.levez.d2u.moviestmdbviewer.ViewModels.DetailsCinematographicViewModel;
 import com.levez.d2u.moviestmdbviewer.ViewModels.GenresViewModel;
 
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -174,7 +170,7 @@ public class CinematographicFragment extends Fragment {
             if(getActivity()!=null){
                 ((MainActivity) getActivity())
                         .inflateFragment(
-                                DetailsCinematographicFragment.newInstance(adapter.get(position).getId(), mTagType), Constant.TAG_FRAG_DETAILS_MOVIE + adapter.get(position).getId());
+                                DetailsCinematographicFragment.newInstance(adapter.get(position).getId(), mTagType), Constant.TAG_FRAG_DETAILS_CINEMATOGRAPHIC + adapter.get(position).getId());
             }
         });
 

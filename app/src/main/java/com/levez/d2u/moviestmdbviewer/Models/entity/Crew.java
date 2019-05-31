@@ -2,6 +2,10 @@ package com.levez.d2u.moviestmdbviewer.Models.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.Parcelable.Creator;
+
+import androidx.room.Entity;
+import androidx.room.Ignore;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -30,6 +34,9 @@ public class Crew extends Team implements Parcelable
         }
 
     };
+
+    public Crew() {
+    }
 
     private Crew(Parcel in) {
         super(in);

@@ -3,6 +3,10 @@ package com.levez.d2u.moviestmdbviewer.Models.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -27,15 +31,19 @@ public class Team implements Parcelable {
 
     @SerializedName("profile_path")
     @Expose
-    private Object profilePath;
+    private String profilePath;
 
 
+    public Team() {
+    }
+
+    @Ignore
     protected Team(Parcel in) {
         this.creditId = ((String) in.readValue((String.class.getClassLoader())));
         this.gender = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.name = ((String) in.readValue((String.class.getClassLoader())));
-        this.profilePath = in.readValue((Object.class.getClassLoader()));
+        this.profilePath =(String)  in.readValue((Object.class.getClassLoader()));
     }
 
     public static final Creator<Team> CREATOR = new Creator<Team>() {
@@ -83,11 +91,11 @@ public class Team implements Parcelable {
         this.name = name;
     }
 
-    public Object getProfilePath() {
+    public String getProfilePath() {
         return profilePath;
     }
 
-    public void setProfilePath(Object profilePath) {
+    public void setProfilePath(String profilePath) {
         this.profilePath = profilePath;
     }
 

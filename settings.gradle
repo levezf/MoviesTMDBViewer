@@ -1,1 +1,1 @@
-include ':app', ':categoryhorizontallibrary', ':searchlibrary', ':categoryverticallibrary'
+include ':app', ':categoryhorizontallibrary', ':searchlibrary'

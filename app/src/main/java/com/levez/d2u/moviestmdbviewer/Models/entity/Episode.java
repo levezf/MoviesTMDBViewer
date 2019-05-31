@@ -3,52 +3,85 @@ package com.levez.d2u.moviestmdbviewer.Models.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity
 public class Episode implements Parcelable
 {
 
     @SerializedName("air_date")
     @Expose
+    @Ignore
     private String airDate;
+
     @SerializedName("crew")
     @Expose
+    @Ignore
     private List<Crew> crew = new ArrayList<>();
+
     @SerializedName("episode_number")
     @Expose
+    @Ignore
     private Integer episodeNumber;
+
     @SerializedName("name")
     @Expose
+    @Ignore
     private String name;
+
     @SerializedName("overview")
     @Expose
+    @Ignore
     private String overview;
+
     @SerializedName("id")
     @Expose
+    @PrimaryKey
     private Integer id;
+
     @SerializedName("production_code")
     @Expose
+    @Ignore
     private String productionCode;
+
     @SerializedName("season_number")
     @Expose
+    @Ignore
     private Integer seasonNumber;
+
     @SerializedName("still_path")
     @Expose
+    @Ignore
     private String stillPath;
+
     @SerializedName("vote_average")
     @Expose
+    @Ignore
     private Double voteAverage;
+
     @SerializedName("vote_count")
     @Expose
+    @Ignore
     private Integer voteCount;
 
     @Expose(serialize = false, deserialize = false)
+    @Ignore
     private boolean watched;
 
+    @Expose(serialize = false, deserialize = false)
+    @ForeignKey(entity = TvSeries.class, parentColumns = {"id"}, childColumns = {"idSerie"}, onDelete = CASCADE)
+    private Integer idSerie;
 
     public final static Creator<Episode> CREATOR = new Creator<Episode>() {
 
@@ -62,6 +95,7 @@ public class Episode implements Parcelable
 
     };
 
+    @Ignore
     private Episode(Parcel in) {
         this.airDate = ((String) in.readValue((String.class.getClassLoader())));
         in.readList(this.crew, (Crew.class.getClassLoader()));
@@ -74,6 +108,8 @@ public class Episode implements Parcelable
         this.stillPath = ((String) in.readValue((String.class.getClassLoader())));
         this.voteAverage = ((Double) in.readValue((Double.class.getClassLoader())));
         this.voteCount = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.idSerie = ((Integer) in.readValue((Integer.class.getClassLoader())));
+
     }
 
     public Episode() {
@@ -182,6 +218,7 @@ public class Episode implements Parcelable
         dest.writeValue(stillPath);
         dest.writeValue(voteAverage);
         dest.writeValue(voteCount);
+        dest.writeValue(idSerie);
     }
 
     public int describeContents() {
@@ -194,5 +231,12 @@ public class Episode implements Parcelable
 
     public void setWatched(boolean watched) {
         this.watched = watched;
+    }
+    public Integer getIdSerie() {
+        return idSerie;
+    }
+
+    public void setIdSerie(Integer idSerie) {
+        this.idSerie = idSerie;
     }
 }

@@ -3,6 +3,9 @@ package com.levez.d2u.moviestmdbviewer.Models.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.levez.d2u.moviestmdbviewer.Models.api.responses.BaseResponse;
@@ -15,70 +18,84 @@ public class Cinematographic extends Searchable implements Parcelable {
 
     @SerializedName("poster_path")
     @Expose
+    @Ignore
     private String posterPath;
 
     @SerializedName("genre_ids")
     @Expose
+    @Ignore
     private List<Integer> genreIds;
 
     @SerializedName("original_language")
     @Expose
+    @Ignore
     private String originalLanguage;
 
     @SerializedName("backdrop_path")
     @Expose
+    @Ignore
     private String backdropPath;
 
     @SerializedName("overview")
     @Expose
+    @Ignore
     private String overview;
 
     @SerializedName("popularity")
     @Expose
+    @Ignore
     private Double popularity;
 
     @SerializedName("vote_count")
     @Expose
+    @Ignore
     private Integer voteCount;
 
     @SerializedName("vote_average")
     @Expose
+    @Ignore
     private Double voteAverage;
 
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
 
     @SerializedName("genres")
     @Expose
+    @Ignore
     private List<Genre> genres;
 
     @SerializedName("production_companies")
     @Expose
+    @Ignore
     private List<ProductionCompany> productionCompanies;
 
     @SerializedName("revenue")
     @Expose
+    @Ignore
     private long revenue;
 
     @SerializedName("runtime")
     @Expose
+    @Ignore
     private Integer runtime;
 
     @SerializedName("videos")
     @Expose
+    @Ignore
     private VideoResponse videosResponse;
 
     @SerializedName("credits")
     @Expose
+    @Ignore
     private Credits credits;
 
 
     @Expose(deserialize = false, serialize = false)
+    @Ignore
     private boolean favorite;
 
-    @Expose(deserialize = false, serialize = false)
-    private long idDatabase;
 
 
     public String getPosterPath() {
@@ -161,13 +178,7 @@ public class Cinematographic extends Searchable implements Parcelable {
         this.favorite = favorite;
     }
 
-    public long getIdDatabase() {
-        return idDatabase;
-    }
 
-    public void setIdDatabase(long idDatabase) {
-        this.idDatabase = idDatabase;
-    }
 
     public List<Genre> getGenres() {
         return genres;
@@ -266,7 +277,6 @@ public class Cinematographic extends Searchable implements Parcelable {
         }
         credits = (Credits) in.readValue(Credits.class.getClassLoader());
         favorite = in.readByte() != 0x00;
-        idDatabase = in.readLong();
     }
 
     @Override
@@ -340,7 +350,6 @@ public class Cinematographic extends Searchable implements Parcelable {
         }
         dest.writeValue(credits);
         dest.writeByte((byte) (favorite ? 0x01 : 0x00));
-        dest.writeLong(idDatabase);
     }
 
     public static final Creator<Cinematographic> CREATOR = new Creator<Cinematographic>() {

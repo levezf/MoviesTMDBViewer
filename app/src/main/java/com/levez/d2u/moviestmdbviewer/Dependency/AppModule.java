@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
 
+import com.levez.d2u.moviestmdbviewer.Models.Repositorys.FavoriteRepository;
 import com.levez.d2u.moviestmdbviewer.Models.Repositorys.GenresDataRepository;
 
 import javax.inject.Singleton;
@@ -35,9 +36,16 @@ public class AppModule {
         return app.getContentResolver();
     }
 
-    @Singleton @Provides
+    @Singleton
+    @Provides
     GenresDataRepository providesGenreDataRepository() {
         return new GenresDataRepository();
+    }
+
+    @Singleton
+    @Provides
+    FavoriteRepository providesFavoriteRepository() {
+        return new FavoriteRepository();
     }
 
 }

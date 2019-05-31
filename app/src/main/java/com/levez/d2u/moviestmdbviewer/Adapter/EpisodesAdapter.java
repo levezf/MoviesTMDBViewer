@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatRatingBar;
@@ -24,6 +25,11 @@ import java.util.Locale;
 public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.ViewHolder> {
 
     private List<Episode> mEpisodes;
+    private OnItemChangeState mOnItemChangeState;
+
+    public interface OnItemChangeState{
+        void change(boolean isCheked, View v, int position);
+    }
 
 
     public EpisodesAdapter(List<Episode> episodes) {
@@ -40,6 +46,7 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
 
 
         Episode ep = mEpisodes.get(position);
@@ -72,10 +79,20 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.ViewHo
             e.printStackTrace();
         }
 
+        holder.itemView.setOnClickListener(v -> holder.btn_check.performClick());
+
         holder.btn_check.setChecked(ep.isWatched());
+
+        holder.btn_check.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            mOnItemChangeState.change(isChecked, buttonView, position);
+        });
 
         holder.tv_date.setText(ep.getAirDate());
 
+    }
+
+    public void setOnItemChangeState(OnItemChangeState onItemChangeState) {
+        this.mOnItemChangeState = onItemChangeState;
     }
 
     @Override

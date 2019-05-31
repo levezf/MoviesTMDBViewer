@@ -8,6 +8,7 @@
     android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/view_layout"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -53,12 +54,23 @@
 
             </LinearLayout>
 
+
         </FrameLayout>
+
 
     </androidx.core.widget.NestedScrollView>
 
-    <include layout="@layout/bottom_sheet_seasons" />
+    <include layout="@layout/bottom_sheet_seasons"
+        tools:visibility = "invisible"/>
 
-    <include layout="@layout/bottom_sheet_episodes" />
+    <include layout="@layout/bottom_sheet_episodes"
+        tools:visibility = "invisible"/>
+
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

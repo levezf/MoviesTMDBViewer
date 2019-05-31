@@ -1,7 +1,6 @@
 package com.levez.d2u.moviestmdbviewer.View;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,38 +13,36 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.collect.Collections2;
 import com.levez.d2u.moviestmdbviewer.Adapter.CinematographicListAdapter;
-import com.levez.d2u.moviestmdbviewer.Adapter.CircleImageAdapterPeople;
-import com.levez.d2u.moviestmdbviewer.Adapter.OnItemClickListener;
-import com.levez.d2u.moviestmdbviewer.Adapter.VideoAdapter;
+import com.levez.d2u.moviestmdbviewer.Dependency.DaggerViewModelFactory;
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Genre;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
 import com.levez.d2u.moviestmdbviewer.Models.entity.People;
-import com.levez.d2u.moviestmdbviewer.Models.entity.ProductionCompany;
-import com.levez.d2u.moviestmdbviewer.Models.entity.ProductionCountry;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Team;
 import com.levez.d2u.moviestmdbviewer.Models.entity.TvSeries;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Video;
 import com.levez.d2u.moviestmdbviewer.R;
+import com.levez.d2u.moviestmdbviewer.Utils.LayoutUtils;
 import com.levez.d2u.moviestmdbviewer.ViewModels.DetailsPeopleViewModel;
+import com.levez.d2u.moviestmdbviewer.ViewModels.FavoriteViewModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
 
-public class DetailsPeopleView extends Fragment {
+import dagger.android.support.AndroidSupportInjection;
+
+
+public class DetailsPeopleFragment extends Fragment implements View.OnClickListener {
 
 
     private static final String EXTRA_PEOPLE = "extra_people";
@@ -55,13 +52,15 @@ public class DetailsPeopleView extends Fragment {
     private int mId;
     private People mPeople;
     private Toolbar mToolbar;
+    private FavoriteViewModel mFavoriteViewModel;
+    @Inject
+    DaggerViewModelFactory viewModelFactory;
 
-
-    public static DetailsPeopleView newInstance(int id) {
+    public static DetailsPeopleFragment newInstance(int id) {
 
         Bundle args = new Bundle();
         args.putInt(EXTRA_ID, id);
-        DetailsPeopleView fragment = new DetailsPeopleView();
+        DetailsPeopleFragment fragment = new DetailsPeopleFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -103,6 +102,9 @@ public class DetailsPeopleView extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        AndroidSupportInjection.inject(this);
+
+        mFavoriteViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteViewModel.class);
 
         mViewModel = ViewModelProviders.of(this).get(DetailsPeopleViewModel.class);
 
@@ -116,6 +118,21 @@ public class DetailsPeopleView extends Fragment {
 
     private void bindPeople(People people) {
         mPeople = people;
+
+
+        FloatingActionButton fab = mView.findViewById(R.id.btn_favorite);
+
+
+        mFavoriteViewModel.getIdsFavorites(Constant.TAG_TYPE_PEOPLE, getContext()).observe(this, integers -> {
+            if(integers.contains(mPeople.getId())){
+                mPeople.setFavorite(true);
+                LayoutUtils.markFavorite(getContext(), fab);
+            }else{
+                mPeople.setFavorite(false);
+                LayoutUtils.clearFavorite(getContext(), fab);
+            }
+        });
+        fab.setOnClickListener(this);
 
         setText(mView, R.id.tv_name, mPeople.getName());
 
@@ -165,7 +182,8 @@ public class DetailsPeopleView extends Fragment {
 
     private <T> void setRecyclerView(View view, @IdRes int idRecyler, @IdRes int idCard, List<T> data){
         if(!configRecyclerView(view.findViewById(idRecyler), data)){
-            view.findViewById(idCard).setVisibility(View.GONE);
+            if(view.findViewById(idCard)!=null)
+                view.findViewById(idCard).setVisibility(View.GONE);
         }
     }
 
@@ -209,7 +227,7 @@ public class DetailsPeopleView extends Fragment {
             Fragment fragment= DetailsCinematographicFragment.newInstance(
                     id, tagType);
 
-            ((MainActivity) Objects.requireNonNull(getActivity())).inflateFragment(fragment, Constant.TAG_FRAG_DETAILS_MOVIE + id);
+            ((MainActivity) Objects.requireNonNull(getActivity())).inflateFragment(fragment, Constant.TAG_FRAG_DETAILS_CINEMATOGRAPHIC + id);
         });
 
         rv.setAdapter(adapter);
@@ -226,6 +244,18 @@ public class DetailsPeopleView extends Fragment {
     @Override
     public void onDestroy() {
         mViewModel.clear();
+        mFavoriteViewModel.clear();
         super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if(mPeople.isFavorite()){
+            mFavoriteViewModel.removeFavorite(getContext(), mPeople);
+        }else{
+            mFavoriteViewModel.insertFavorite(getContext(), mPeople);
+        }
+
     }
 }
