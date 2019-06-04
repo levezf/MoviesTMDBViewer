@@ -32,6 +32,11 @@ public class FavoriteViewModel extends ViewModel {
         return mRepository.getFavorites(tagType, context);
     }
 
+    public LiveData<List<Integer>> getEpisodesFavorites(int idSerie, Context context){
+
+        return mRepository.getFavoritesEpisode(idSerie, context);
+    }
+
     public <T> void removeFavorite(Context context, T t){
 
         mRepository.delete(context, t);

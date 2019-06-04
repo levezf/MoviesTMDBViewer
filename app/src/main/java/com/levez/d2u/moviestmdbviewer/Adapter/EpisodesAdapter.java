@@ -26,14 +26,17 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.ViewHo
 
     private List<Episode> mEpisodes;
     private OnItemChangeState mOnItemChangeState;
+    private List<Integer> mFavorites;
+
 
     public interface OnItemChangeState{
         void change(boolean isCheked, View v, int position);
     }
 
 
-    public EpisodesAdapter(List<Episode> episodes) {
+    public EpisodesAdapter(List<Episode> episodes, List<Integer> favoritesList) {
         this.mEpisodes = episodes;
+        this.mFavorites = favoritesList;
     }
 
     @NonNull
@@ -81,11 +84,9 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.ViewHo
 
         holder.itemView.setOnClickListener(v -> holder.btn_check.performClick());
 
-        holder.btn_check.setChecked(ep.isWatched());
+        holder.btn_check.setChecked(mFavorites.contains(ep.getId()));
 
-        holder.btn_check.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            mOnItemChangeState.change(isChecked, buttonView, position);
-        });
+        holder.btn_check.setOnCheckedChangeListener((buttonView, isChecked) -> mOnItemChangeState.change(isChecked, buttonView, position));
 
         holder.tv_date.setText(ep.getAirDate());
 
@@ -93,6 +94,10 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.ViewHo
 
     public void setOnItemChangeState(OnItemChangeState onItemChangeState) {
         this.mOnItemChangeState = onItemChangeState;
+    }
+
+    public Episode get(int position) {
+        return mEpisodes.get(position);
     }
 
     @Override

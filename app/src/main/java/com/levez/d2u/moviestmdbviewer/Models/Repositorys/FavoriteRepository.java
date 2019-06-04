@@ -34,15 +34,16 @@ public class FavoriteRepository extends BaseRepository{
 
                 return AppDatabase.getInstance(context).tvSeriesDAO().getAllIds();
 
-            case Constant.TAG_TYPE_EPISODE:
-
-                return AppDatabase.getInstance(context).episodeDAO().getAllIds();
-
             default:
 
                 return AppDatabase.getInstance(context).peopleDAO().getAllIds();
 
         }
+    }
+
+    public LiveData<List<Integer>> getFavoritesEpisode(int idSerie, Context context){
+
+        return AppDatabase.getInstance(context).episodeDAO().getAllIds(idSerie);
     }
 
     public <T> void delete(Context context, T t) {

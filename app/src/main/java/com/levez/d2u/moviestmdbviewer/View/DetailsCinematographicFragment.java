@@ -96,6 +96,7 @@ public class DetailsCinematographicFragment extends Fragment  implements View.On
     private FavoriteViewModel mFavoriteViewModel;
     @Inject
     DaggerViewModelFactory viewModelFactory;
+    private List<Integer> mFavoritesList;
 
 
     public static DetailsCinematographicFragment newInstance(int idCinematographic, String tagType) {
@@ -176,21 +177,26 @@ public class DetailsCinematographicFragment extends Fragment  implements View.On
 
         if(mCinematographic == null){
             mViewModel.getDetails(mId).observe(this, this::bindFindViewById);
+
         }else{
             bindFindViewById(mCinematographic);
         }
-
         mFavoriteViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteViewModel.class);
 
 
+    }
 
-
+    private void bindFavorites(List<Integer> integers) {
+        if(integers!=null) {
+            mFavoritesList = (integers);
+        }
     }
 
     private void bindFindViewById(Cinematographic c) {
 
         mCinematographic = c;
 
+        mFavoriteViewModel.getEpisodesFavorites(mCinematographic.getId(), getContext()).observe(this, this::bindFavorites);
 
         FloatingActionButton fab = mView.findViewById(R.id.btn_favorite);
 
@@ -217,10 +223,6 @@ public class DetailsCinematographicFragment extends Fragment  implements View.On
             mBottomSheetBehaviorSeason.setState(BottomSheetBehavior.STATE_COLLAPSED);
             mBottomSheetBehaviorEpisode.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }else{
-
-
-            /*TODO Fazer o watched dos episode*/
-
 
             setText(R.id.tv_title, ((TvSeries) c).getName());
             setText(R.id.tv_date_release, ((TvSeries) c).getFirstAirDate());
@@ -303,30 +305,28 @@ public class DetailsCinematographicFragment extends Fragment  implements View.On
                             ((TvSeries) mCinematographic).getSeasons().set(position, season);
 
 
-/*
-                            mFavoriteViewModel.getIdsFavorites(Constant.TAG_TYPE_EPISODE, getContext()).observe(this, integers -> {
-
-                                for (int i = 0; i < season.getEpisodes().size(); i++) {
-
-                                    if(integers.contains(season.getEpisodes().get(i).getId())) {
-                                        season.getEpisodes().get(i).setWatched(true);
-                                        mAdapterEpisodesBottomSheet.notifyItemChanged(i);
-                                    }
-                                }
-
-                            });*/
-                            mAdapterEpisodesBottomSheet = new EpisodesAdapter(season.getEpisodes());
-/*
+                            mAdapterEpisodesBottomSheet = new EpisodesAdapter(season.getEpisodes(), mFavoritesList);
                             mAdapterEpisodesBottomSheet.setOnItemChangeState((isCheked, view, i) -> {
+
+                                Episode ep = mAdapterEpisodesBottomSheet.get(i);
+                                ep.setIdSerie(mCinematographic.getId());
+
                                 if(isCheked){
-                                    mFavoriteViewModel.insertFavorite(getContext(), season.getEpisodes().get(i));
+                                    mFavoriteViewModel.insertFavorite(getContext(), ep);
+                                    mAdapterEpisodesBottomSheet.get(i).setWatched(true);
+                                    if(!mCinematographic.isFavorite()) mFavoriteViewModel.insertFavorite(getContext(), mCinematographic);
                                 }else{
-                                    mFavoriteViewModel.removeFavorite(getContext(), season.getEpisodes().get(i));
+                                    mFavoriteViewModel.removeFavorite(getContext(), ep);
+                                    mAdapterEpisodesBottomSheet.get(i).setWatched(false);
                                 }
-                            });*/
+                            });
+
                             setupBottomSheetEpisodes();
                             expandBottomSheetEpisodes();
                         }));
+
+
+
 
         mListSeasons.setAdapter(mAdapterSeasonsBottomSheet);
 
