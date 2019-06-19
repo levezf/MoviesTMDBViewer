@@ -63,13 +63,4 @@ public class CinematographicViewModel extends CineViewModel {
                 (Function<Integer, LiveData<List<Cinematographic>>>) page -> mRepository.getByGenre(page, genre));
     }
 
-
-
-    public LiveData<List<Cinematographic>> getMovieFavorites() {
-        return null;
-    }
-
-    public LiveData<List<Cinematographic>> getSeriesFavorites() {
-        return null;
-    }
 }

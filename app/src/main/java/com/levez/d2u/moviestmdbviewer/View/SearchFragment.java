@@ -169,7 +169,7 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
     @Override
     public void onClick(View v, int position, Searchable searchable,String tagType) {
 
-        int id = -1;
+        int id;
 
         switch (tagType){
 

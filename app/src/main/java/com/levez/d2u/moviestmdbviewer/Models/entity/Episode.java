@@ -16,7 +16,8 @@ import java.util.List;
 
 import static androidx.room.ForeignKey.CASCADE;
 
-@Entity
+@Entity(foreignKeys = {
+        @ForeignKey(entity = TvSeries.class, parentColumns = {"id"}, childColumns = {"idSerie"}, onDelete = CASCADE)})
 public class Episode implements Parcelable
 {
 
@@ -80,7 +81,6 @@ public class Episode implements Parcelable
     private boolean watched;
 
     @Expose(serialize = false, deserialize = false)
-    @ForeignKey(entity = TvSeries.class, parentColumns = {"id"}, childColumns = {"idSerie"}, onDelete = CASCADE)
     private Integer idSerie;
 
     public final static Creator<Episode> CREATOR = new Creator<Episode>() {
