@@ -24,21 +24,6 @@ import io.reactivex.schedulers.Schedulers;
 public class GenresDataRepository extends BaseRepository{
 
 
-   // private static volatile GenresDataRepository sInstance;
-
-   /* public static GenresDataRepository getInstance() {
-
-       *//* synchronized (GenresDataRepository.class){
-            if(sInstance == null){
-                sInstance = new GenresDataRepository();
-            }
-        }
-
-        return sInstance;*//*
-
-    }*/
-
-
     @Inject
     public GenresDataRepository() {
     }

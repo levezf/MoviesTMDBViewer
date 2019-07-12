@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -16,8 +17,13 @@ import java.util.List;
 
 import static androidx.room.ForeignKey.CASCADE;
 
-@Entity(foreignKeys = {
-        @ForeignKey(entity = TvSeries.class, parentColumns = {"id"}, childColumns = {"idSerie"}, onDelete = CASCADE)})
+@Entity(
+        indices = {@Index(
+                value = ("idSerie"),
+                name = "idx_idSerie")},
+
+        foreignKeys = {
+                @ForeignKey(entity = TvSeries.class, parentColumns = {"id"}, childColumns = {"idSerie"}, onDelete = CASCADE)})
 public class Episode implements Parcelable
 {
 

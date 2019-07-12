@@ -22,5 +22,6 @@
     <string name="see_seasons_and_episodes">See Seasons and Episodes</string>
     <string name="seasons">Seasons</string>
     <string name="episodes">Episodes</string>
+    <string name="text_no_favorites">You do not have any favorites yet :(\nFind movies, shows, and people and add them to your favorites.</string>
 
 </resources>

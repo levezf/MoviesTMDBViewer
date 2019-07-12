@@ -7,7 +7,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Video;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class VideoResponse implements Parcelable

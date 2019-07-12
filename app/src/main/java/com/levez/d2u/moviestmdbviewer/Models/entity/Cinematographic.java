@@ -8,7 +8,6 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.levez.d2u.moviestmdbviewer.Models.api.responses.BaseResponse;
 import com.levez.d2u.moviestmdbviewer.Models.api.responses.VideoResponse;
 
 import java.util.ArrayList;

@@ -3,14 +3,12 @@ package com.levez.d2u.moviestmdbviewer.Models.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.room.Entity;
 import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Team implements Parcelable {
+public class Team implements Parcelable, HasProfilePath {
 
 
     @SerializedName("credit_id")
@@ -91,6 +89,7 @@ public class Team implements Parcelable {
         this.name = name;
     }
 
+    @Override
     public String getProfilePath() {
         return profilePath;
     }

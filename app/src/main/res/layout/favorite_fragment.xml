@@ -1,29 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
-    <com.levez.d2u.categoryhorizontalview.CategoryHorizontalView
-        android:id="@+id/chv_movie_favorite"
-        app:title="Movies"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
 
 
-    <com.levez.d2u.categoryhorizontalview.CategoryHorizontalView
-        android:id="@+id/chv_tv_series_favorite"
-        app:title="Tv Series"
+        <com.levez.d2u.categoryhorizontalview.CategoryHorizontalView
+            android:id="@+id/chv_movie_favorite"
+            app:title="Movies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.levez.d2u.categoryhorizontalview.CategoryHorizontalView
+            android:id="@+id/chv_tv_series_favorite"
+            app:title="Tv Series"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.levez.d2u.categoryhorizontalview.CategoryHorizontalView
+            android:id="@+id/chv_people_favorite"
+            app:title="People"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:padding="30dp"
+        android:id="@+id/place_holder_empty"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:text="@string/text_no_favorites"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <com.levez.d2u.categoryhorizontalview.CategoryHorizontalView
-        android:id="@+id/chv_people_favorite"
-        app:title="People"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
 
-</LinearLayout>
+
+</FrameLayout>
+
+
+
+

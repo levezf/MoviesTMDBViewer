@@ -11,8 +11,6 @@ import com.levez.d2u.moviestmdbviewer.Models.entity.Episode;
 
 import java.util.List;
 
-import retrofit2.http.DELETE;
-
 @Dao
 public interface EpisodeDAO  {
 

@@ -3,16 +3,15 @@ package com.levez.d2u.moviestmdbviewer.View;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.view.MenuItem;
-
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
 import com.levez.d2u.moviestmdbviewer.R;
 
@@ -132,7 +131,7 @@ public class MainActivity extends DaggerAppCompatActivity implements BottomNavig
                 break;
 
             case R.id.action_favorites:
-                fragment = new Fragment();
+                fragment = FavoriteFragment.newInstance();
                 tag = TAG_FRAG_FAVORITES;
                 break;
         }

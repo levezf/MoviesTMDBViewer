@@ -1,21 +1,16 @@
 package com.levez.d2u.moviestmdbviewer.Adapter;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.levez.d2u.categoryhorizontalview.CategoryHorizontalView;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
 import com.levez.d2u.moviestmdbviewer.R;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class ListCategoryViewAdapter  extends RecyclerView.Adapter<ListCategoryViewAdapter.ViewHolder> {
 

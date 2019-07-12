@@ -13,7 +13,6 @@ import com.levez.d2u.moviestmdbviewer.Models.entity.Season;
 import com.levez.d2u.moviestmdbviewer.Models.entity.TvSeries;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;

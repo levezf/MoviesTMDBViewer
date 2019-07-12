@@ -5,12 +5,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
 import com.levez.d2u.moviestmdbviewer.Models.api.RetrofitConfig;
-import com.levez.d2u.moviestmdbviewer.Models.api.responses.GenresResponse;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Genre;
 import com.levez.d2u.moviestmdbviewer.Models.entity.People;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;

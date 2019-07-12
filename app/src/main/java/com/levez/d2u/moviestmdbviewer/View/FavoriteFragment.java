@@ -5,27 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.levez.d2u.categoryhorizontalview.CategoryHorizontalView;
 import com.levez.d2u.moviestmdbviewer.Adapter.CinematographicListAdapter;
 import com.levez.d2u.moviestmdbviewer.Adapter.CircleImageAdapterPeople;
 import com.levez.d2u.moviestmdbviewer.Dependency.DaggerViewModelFactory;
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Team;
-import com.levez.d2u.moviestmdbviewer.Models.entity.TvSeries;
 import com.levez.d2u.moviestmdbviewer.R;
 import com.levez.d2u.moviestmdbviewer.ViewModels.FavoriteViewModel;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -38,13 +31,21 @@ public class FavoriteFragment extends Fragment {
     private View mView;
 
     private FavoriteViewModel mFavoriteViewModel;
+
     @Inject
     DaggerViewModelFactory viewModelFactory;
 
     private CategoryHorizontalView mCategoryMovies;
     private CategoryHorizontalView mCategoryPeople;
     private CategoryHorizontalView mCategoryTvSeries;
+    private CinematographicListAdapter mMoviesAdapter;
+    private CinematographicListAdapter mTvSeriesAdapter;
+    private CircleImageAdapterPeople mPeopleAdapter;
 
+
+    public static FavoriteFragment newInstance() {
+        return new FavoriteFragment();
+    }
 
     @Nullable
     @Override
@@ -65,6 +66,18 @@ public class FavoriteFragment extends Fragment {
         mCategoryPeople = mView.findViewById(R.id.chv_people_favorite);
         mCategoryTvSeries = mView.findViewById(R.id.chv_tv_series_favorite);
 
+        mMoviesAdapter = new CinematographicListAdapter();
+        mTvSeriesAdapter = new CinematographicListAdapter();
+        mPeopleAdapter = new CircleImageAdapterPeople(new ArrayList<>());
+
+        mCategoryMovies.startRecyclerView(mMoviesAdapter);
+        mCategoryPeople.startRecyclerView(mPeopleAdapter);
+        mCategoryTvSeries.startRecyclerView(mTvSeriesAdapter);
+
+        mMoviesAdapter.setClickListener((v, position) -> click(v, position, Constant.TAG_TYPE_MOVIE));
+        mTvSeriesAdapter.setClickListener((v, position) -> click(v, position, Constant.TAG_TYPE_TV_SERIES));
+        mPeopleAdapter.setClickListener((v, position) -> click(v, position, Constant.TAG_TYPE_PEOPLE));
+
     }
 
 
@@ -75,83 +88,78 @@ public class FavoriteFragment extends Fragment {
 
         mFavoriteViewModel.getIdsFavorites(Constant.TAG_TYPE_MOVIE, getContext()).observe(this, integers -> {
 
-            for (Integer integer : integers) {
+            if(integers != null && !integers.isEmpty()) {
+                mCategoryMovies.setVisibility(View.VISIBLE);
 
-                mFavoriteViewModel.getMovies();
+                for (Integer id : integers) {
+                    mCategoryMovies.hideProgress();
+
+                    mFavoriteViewModel.getMovieById(id).observe(this, movie ->
+                            ((CinematographicListAdapter) mCategoryMovies.getAdapter()).insertItem(movie));
+                }
+            }else{
+                mCategoryMovies.setVisibility(View.GONE);
+                verifyAllIsGone();
             }
 
         });
 
+        mFavoriteViewModel.getIdsFavorites(Constant.TAG_TYPE_TV_SERIES, getContext()).observe(this, integers -> {
+
+            if(integers != null && !integers.isEmpty()) {
+                mCategoryTvSeries.setVisibility(View.VISIBLE);
+
+                for (Integer id : integers) {
+                    mCategoryTvSeries.hideProgress();
+
+                    mFavoriteViewModel.getTvSeriesById(id).observe(this, tvSeries ->
+                            ((CinematographicListAdapter) mCategoryTvSeries.getAdapter()).insertItem(tvSeries));
+                }
+
+            }else{
+                mCategoryTvSeries.setVisibility(View.GONE);
+                verifyAllIsGone();
+            }
+
+        });
+
+
+        mFavoriteViewModel.getIdsFavorites(Constant.TAG_TYPE_PEOPLE, getContext()).observe(this, integers -> {
+
+            if(integers != null && !integers.isEmpty()) {
+
+                mCategoryPeople.setVisibility(View.VISIBLE);
+
+                for (Integer id : integers) {
+
+                    mCategoryPeople.hideProgress();
+
+                    mFavoriteViewModel.getPeopleById(id).observe(this, people ->
+                            ((CircleImageAdapterPeople) mCategoryPeople.getAdapter()).insertItem(people));
+                }
+
+            }else{
+                mCategoryPeople.setVisibility(View.GONE);
+                verifyAllIsGone();
+            }
+        });
+
     }
 
+    private void verifyAllIsGone() {
 
-    void setupCategoryView(CategoryHorizontalView categoryHorizontalView){
+        if(mCategoryMovies.getVisibility()==View.GONE &&
+                mCategoryPeople.getVisibility() == View.GONE &&
+                mCategoryTvSeries.getVisibility() == View.GONE){
 
-        categoryHorizontalView.disableShowMore(true);
-        categoryHorizontalView.startRecyclerView(configRecyclerView());
+            if(mView.findViewById(R.id.place_holder_empty).getVisibility() == View.GONE)
+                mView.findViewById(R.id.place_holder_empty).setVisibility(View.VISIBLE);
 
-    }
-
-    private <T> void setRecyclerView(@IdRes int idRecyler, @IdRes int idCard, List<T> data){
-        if(!configRecyclerView(mView.findViewById(idRecyler), data)){
-            mView.findViewById(idCard).setVisibility(View.GONE);
-        }
-    }
-
-
-    private <T> RecyclerView.Adapter configRecyclerView(LiveData<T> liveData, T data){
-        if(data == null){
-            return null;
-        }
-
-        RecyclerView.Adapter adapter;
-
-        if(data.get(0) instanceof Team) {
-
-            //noinspection unchecked
-            adapter = new CircleImageAdapterPeople((List<Team>)data);
-            ((CircleImageAdapterPeople) adapter).setClickListener((v, position) -> {
-
-                int id = (((List<Team>) data).get(position)).getId();
-                inflate(
-                        DetailsPeopleFragment.newInstance(id), Constant.TAG_FRAG_DETAILS_PEOPLE + id);
-
-            });
-            liveData.observe(this, ts -> {
-                ((CircleImageAdapterPeople) adapter).insertItems((List<Team>)  ts);
-            });
-
-
-        }else {
-
-            //noinspection unchecked
-            adapter = new CinematographicListAdapter((List<Cinematographic>) data);
-            ((CinematographicListAdapter) adapter).setClickListener((v, position) -> {
-
-                int id = (((List<Cinematographic>)data).get(position) instanceof TvSeries) ?
-                        ((TvSeries) data).getId() : ((Movie) data).getId();
-
-                Fragment fragment = DetailsCinematographicFragment.newInstance(
-                        id,
-                        ((((List<Cinematographic>)data).get(position) instanceof TvSeries) ?
-                                Constant.TAG_TYPE_TV_SERIES : Constant.TAG_TYPE_MOVIE));
-
-                inflate(fragment, Constant.TAG_FRAG_DETAILS_CINEMATOGRAPHIC + id);
-            });
-
-            liveData.observe(this, ts -> {
-                ((CinematographicListAdapter) adapter).insertItems((List<Cinematographic>)  ts);
-            });
-
+        }else{
+            mView.findViewById(R.id.place_holder_empty).setVisibility(View.GONE);
         }
 
-
-
-
-        return adapter;
     }
-
-
 
     @Override
     public void onDestroy() {
@@ -159,27 +167,30 @@ public class FavoriteFragment extends Fragment {
         mFavoriteViewModel.clear();
     }
 
-/*
-    @Override
-    public void onClick(View v, int position, Searchable searchable, String tagType) {
+    private void click(View v, int position, String tagType) {
 
-        int id;
+        int id = -1;
 
         switch (tagType){
 
             case Constant.TAG_TYPE_PEOPLE:
-                id  = ((People) searchable).getId();
+                id  = mPeopleAdapter.getPeople(position).getId();
                 inflate(DetailsPeopleFragment.newInstance(id), Constant.TAG_FRAG_DETAILS_PEOPLE + id);
                 break;
 
             case Constant.TAG_TYPE_MOVIE:
+                id = mMoviesAdapter.get(position).getId();
             case Constant.TAG_TYPE_TV_SERIES:
-                id  = ((Cinematographic) searchable).getId();
+
+                if(id==-1)
+                    id  = mTvSeriesAdapter.get(position).getId();
+
                 inflate(DetailsCinematographicFragment.newInstance(id, tagType), Constant.TAG_FRAG_DETAILS_CINEMATOGRAPHIC + id);
                 break;
         }
 
-    }*/
+    }
+
     private void inflate(Fragment fragment, String tag){
         ((MainActivity) Objects.requireNonNull(getActivity())).inflateFragment(fragment, tag);
     }

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class People extends Searchable implements Parcelable
+public class People extends Searchable implements Parcelable, HasProfilePath
 {
     @SerializedName("birthday")
     @Expose
@@ -158,6 +158,7 @@ public class People extends Searchable implements Parcelable
         return tvCredits.getParticipations();
     }
 
+    @Override
     public String getProfilePath() {
         return profilePath;
     }

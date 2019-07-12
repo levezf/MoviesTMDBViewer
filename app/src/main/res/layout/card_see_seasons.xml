@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_see_seasons"
+<com.google.android.material.card.MaterialCardView android:id="@+id/card_see_seasons"
     android:visibility="gone"
     android:clickable="true"
     android:focusable="true"

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Season;
 import com.levez.d2u.moviestmdbviewer.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SeasonsAdapter  extends RecyclerView.Adapter<SeasonsAdapter.ViewHolder> {

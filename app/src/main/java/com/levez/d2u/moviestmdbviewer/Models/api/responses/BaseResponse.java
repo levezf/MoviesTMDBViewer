@@ -5,9 +5,9 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Searchable;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
 import com.levez.d2u.moviestmdbviewer.Models.entity.People;
+import com.levez.d2u.moviestmdbviewer.Models.entity.Searchable;
 import com.levez.d2u.moviestmdbviewer.Models.entity.TvSeries;
 
 import java.util.ArrayList;

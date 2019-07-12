@@ -10,20 +10,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Team;
+import com.levez.d2u.moviestmdbviewer.Models.entity.HasProfilePath;
+import com.levez.d2u.moviestmdbviewer.Models.entity.People;
 import com.levez.d2u.moviestmdbviewer.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CircleImageAdapterPeople extends RecyclerView.Adapter<CircleImageAdapterPeople.ViewHolder> {
 
-    private List<Team> mTeam;
+    private List<HasProfilePath> mTeam;
     private OnItemClickListener mClickListener;
 
 
-    public <T extends Team> CircleImageAdapterPeople(List<T> team) {
-        this.mTeam = ( List<Team> )team;
+    public CircleImageAdapterPeople(List<HasProfilePath> team) {
+        this.mTeam = team;
     }
 
     @NonNull
@@ -39,7 +39,7 @@ public class CircleImageAdapterPeople extends RecyclerView.Adapter<CircleImageAd
         Glide
                 .with(viewHolder.itemView.getContext())
                 .load(
-                        (mTeam.get(i).getProfilePath() == null|| ((String) mTeam.get(i).getProfilePath()).isEmpty()) ?
+                        (mTeam.get(i).getProfilePath() == null|| mTeam.get(i).getProfilePath().isEmpty()) ?
                                 R.drawable.no_photo :
                                 Constant.BASE_URL_IMAGE + mTeam.get(i).getProfilePath()
 
@@ -57,6 +57,15 @@ public class CircleImageAdapterPeople extends RecyclerView.Adapter<CircleImageAd
     @Override
     public int getItemCount() {
         return (mTeam !=null)? mTeam.size():0;
+    }
+
+    public void insertItem(HasProfilePath team) {
+        mTeam.add(team);
+        notifyItemInserted(getItemCount()-1);
+    }
+
+    public People getPeople(int position) {
+        return (People) mTeam.get(position);
     }
 
 

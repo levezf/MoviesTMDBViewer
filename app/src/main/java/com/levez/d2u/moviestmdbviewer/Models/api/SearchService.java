@@ -3,7 +3,6 @@ package com.levez.d2u.moviestmdbviewer.Models.api;
 import com.levez.d2u.moviestmdbviewer.Models.api.responses.BaseResponse;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
 import com.levez.d2u.moviestmdbviewer.Models.entity.People;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Searchable;
 import com.levez.d2u.moviestmdbviewer.Models.entity.TvSeries;
 
 import io.reactivex.Observable;

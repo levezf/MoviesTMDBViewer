@@ -1,15 +1,12 @@
 package com.levez.d2u.moviestmdbviewer.ViewModels;
 
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.levez.d2u.moviestmdbviewer.Models.Repositorys.SearchRepository;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Searchable;
-import com.levez.d2u.searchlibrary.SearchView;
 
 import java.util.List;
 

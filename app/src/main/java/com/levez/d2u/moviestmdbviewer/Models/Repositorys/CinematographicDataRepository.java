@@ -4,19 +4,13 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
-import com.levez.d2u.moviestmdbviewer.Models.api.RetrofitConfig;
 import com.levez.d2u.moviestmdbviewer.Models.api.responses.BaseResponse;
-import com.levez.d2u.moviestmdbviewer.Models.api.responses.GenresResponse;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Genre;
 import com.levez.d2u.moviestmdbviewer.Models.entity.MutableListMap;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Season;
-import com.levez.d2u.moviestmdbviewer.Models.entity.TvSeries;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -24,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;

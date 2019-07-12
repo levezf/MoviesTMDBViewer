@@ -1,11 +1,12 @@
 package com.levez.d2u.moviestmdbviewer.Adapter;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
@@ -62,6 +63,11 @@ public class CinematographicListAdapter extends RecyclerView.Adapter<Cinematogra
 
     public Cinematographic get(int position) {
         return mCinematographics.get(position);
+    }
+
+    public void insertItem(Cinematographic cinematographic) {
+        mCinematographics.add(cinematographic);
+        notifyItemInserted(getItemCount()-1);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

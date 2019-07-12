@@ -4,12 +4,11 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.levez.d2u.moviestmdbviewer.Models.Repositorys.FavoriteRepository;
-import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Episode;
+import com.levez.d2u.moviestmdbviewer.Models.Repositorys.MoviesDataRepository;
+import com.levez.d2u.moviestmdbviewer.Models.Repositorys.PeopleDataRepository;
+import com.levez.d2u.moviestmdbviewer.Models.Repositorys.TvSeriesDataRepository;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
 import com.levez.d2u.moviestmdbviewer.Models.entity.People;
 import com.levez.d2u.moviestmdbviewer.Models.entity.TvSeries;
@@ -21,6 +20,9 @@ import javax.inject.Inject;
 public class FavoriteViewModel extends ViewModel {
 
     private FavoriteRepository mRepository;
+    private MoviesDataRepository mMoviesRepository;
+    private TvSeriesDataRepository mTvSeriesRepository;
+    private PeopleDataRepository mPeopleRepository;
 
     @Inject
     public FavoriteViewModel(FavoriteRepository repository) {
@@ -46,6 +48,31 @@ public class FavoriteViewModel extends ViewModel {
 
         mRepository.insert(context, t);
 
+    }
+
+    public LiveData<Movie> getMovieById(int idMovie){
+
+        if(mMoviesRepository==null)
+            mMoviesRepository = new MoviesDataRepository();
+
+        return mMoviesRepository.getById(idMovie);
+    }
+
+
+    public LiveData<TvSeries> getTvSeriesById(int idSeries){
+
+        if(mTvSeriesRepository==null)
+            mTvSeriesRepository = new TvSeriesDataRepository();
+
+        return mTvSeriesRepository.getById(idSeries);
+    }
+
+    public LiveData<People> getPeopleById(int idPeople){
+
+        if(mPeopleRepository==null)
+            mPeopleRepository = new PeopleDataRepository();
+
+        return mPeopleRepository.getPeopleById(idPeople);
     }
 
     public void clear(){

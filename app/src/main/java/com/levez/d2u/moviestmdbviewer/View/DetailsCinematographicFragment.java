@@ -19,7 +19,6 @@ import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,6 +41,7 @@ import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Episode;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Genre;
+import com.levez.d2u.moviestmdbviewer.Models.entity.HasProfilePath;
 import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
 import com.levez.d2u.moviestmdbviewer.Models.entity.ProductionCompany;
 import com.levez.d2u.moviestmdbviewer.Models.entity.ProductionCountry;
@@ -371,7 +371,7 @@ public class DetailsCinematographicFragment extends Fragment  implements View.On
         if(data.get(0) instanceof Team) {
 
             //noinspection unchecked
-            adapter = new CircleImageAdapterPeople((List<Team>)data);
+            adapter = new CircleImageAdapterPeople((List<HasProfilePath>)data);
             ((CircleImageAdapterPeople) adapter).setClickListener((v, position) -> {
 
                 int id = ((Team) data.get(position)).getId();

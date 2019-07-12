@@ -6,8 +6,6 @@ import com.levez.d2u.moviestmdbviewer.Models.Repositorys.CinematographicDataRepo
 import com.levez.d2u.moviestmdbviewer.Models.Repositorys.MoviesDataRepository;
 import com.levez.d2u.moviestmdbviewer.Models.Repositorys.TvSeriesDataRepository;
 import com.levez.d2u.moviestmdbviewer.Models.api.Constant;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Cinematographic;
-import com.levez.d2u.moviestmdbviewer.Models.entity.Movie;
 
 class CineViewModel extends ViewModel {
 
@@ -21,8 +19,6 @@ class CineViewModel extends ViewModel {
             mRepository = new MoviesDataRepository();
         }else if (tagType.equals(Constant.TAG_TYPE_TV_SERIES)){
             mRepository = new TvSeriesDataRepository();
-        }else{
-            //mRepository = new DatabaseRepository();
         }
     }
 
