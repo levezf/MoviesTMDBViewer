@@ -66,8 +66,10 @@ public class CinematographicListAdapter extends RecyclerView.Adapter<Cinematogra
     }
 
     public void insertItem(Cinematographic cinematographic) {
-        mCinematographics.add(cinematographic);
-        notifyItemInserted(getItemCount()-1);
+        if(!mCinematographics.contains(cinematographic)) {
+            mCinematographics.add(cinematographic);
+            notifyItemInserted(getItemCount() - 1);
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

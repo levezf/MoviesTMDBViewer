@@ -3,6 +3,7 @@ package com.levez.d2u.moviestmdbviewer.Models.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.Nullable;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
@@ -362,4 +363,11 @@ public class Cinematographic extends Searchable implements Parcelable {
             return new Cinematographic[size];
         }
     };
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(!(obj instanceof Cinematographic)) return false;
+
+        return this.id.equals(((Cinematographic) obj).id);
+    }
 }

@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-
-
-
+    android:background="?attr/selectableItemBackground"
     android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:layout_width="match_parent"
@@ -13,19 +11,19 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:innerRadius="0dp"
         app:cardBackgroundColor="@android:color/black"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_poster"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:scaleY="0.6"
             android:scaleX="0.6"
             android:scaleType="centerCrop"
@@ -42,8 +40,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:maxLines="2"
+        android:maxLines="1"
         android:ellipsize="end"
         android:layout_marginStart="16dp"
         android:textSize="15sp"

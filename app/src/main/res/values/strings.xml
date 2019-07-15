@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MoviesTMDB Viewer</string>
+    <string name="app_name">Close-Up</string>
     <string name="text_help">Use the search form above to search for movies, TV shows and people</string>
     <string name="msg_overview_empty">Overview not available…</string>
     <string name="cast">Cast</string>
@@ -23,5 +23,6 @@
     <string name="seasons">Seasons</string>
     <string name="episodes">Episodes</string>
     <string name="text_no_favorites">You do not have any favorites yet :(\nFind movies, shows, and people and add them to your favorites.</string>
+    <string name="search_not_found">Oops! We could not find any results for your search.</string>
 
 </resources>

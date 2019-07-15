@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -106,21 +105,19 @@ public class CinematographicFragment extends Fragment {
     }
 
     private void initDiscover() {
-        initBasicsCinematographicsDiscover();
 
-        mGenresViewModel.getGenres(mTagType).observe(this, new Observer<List<Genre>>() {
-            @Override
-            public void onChanged(@Nullable List<Genre> genres) {
-                assert genres != null;
+        mGenresViewModel.getGenres(mTagType).observe(this, genres -> {
+            assert genres != null;
+            initBasicsCinematographicsDiscover();
 
-                for (Genre genre : genres) {
-                    startCinematographicList(categoryHorizontalViewCreate(genre.getName()),
-                            mViewModel.getAllByGenre(genre), genre.getName());
-                }
+            for (Genre genre : genres) {
+                startCinematographicList(categoryHorizontalViewCreate(genre.getName()),
+                        mViewModel.getAllByGenre(genre), genre.getName());
 
             }
         });
     }
+
 
     private void initBasicsCinematographicsDiscover() {
 

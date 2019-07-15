@@ -3,6 +3,7 @@ package com.levez.d2u.moviestmdbviewer.Models.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.Nullable;
 import androidx.room.Ignore;
 
 import com.google.gson.annotations.Expose;
@@ -109,5 +110,12 @@ public class Team implements Parcelable, HasProfilePath {
 
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(!(obj instanceof Team)) return false;
+
+        return this.id.equals(((Team) obj).id);
     }
 }

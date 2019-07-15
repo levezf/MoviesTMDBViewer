@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -48,6 +50,8 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
     private ListSearchAdapter mAdapter;
     private AppCompatTextView mMessageHelper;
     private ProgressBar mProgress;
+    private ImageView mImageHelp;
+    private LinearLayout mPlaceHolderHelp;
     private ArrayList<Searchable> mSearchables = new ArrayList<>();
 
     public static SearchFragment newInstance() {
@@ -69,6 +73,8 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
         mList = mView.findViewById(R.id.rv_list);
         mMessageHelper = mView.findViewById(R.id.tv_helper);
         mProgress = mView.findViewById(R.id.progress);
+        mPlaceHolderHelp = mView.findViewById(R.id.place_holder_help);
+        mImageHelp = mView.findViewById(R.id.image_help);
 
         return mView;
 
@@ -80,6 +86,7 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
 
         bindSearchView();
         bindSearchList();
+        showHelpSearch();
 
         if (savedInstanceState != null) {
             mSearchables = savedInstanceState.getParcelableArrayList(EXTRA_LIST_SEARCH);
@@ -88,8 +95,9 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
             mViewModel.getSearch().observe(this, searchables -> {
                 mProgress.setVisibility(View.GONE);
                 if((searchables==null || searchables.isEmpty()) && mAdapter.getItemCount()==0){
-                    mMessageHelper.setText("Oops! We could not find any results for your search.");
-                    mMessageHelper.setVisibility(View.VISIBLE);
+
+                  showNotFound();
+
                 }
                 assert searchables != null;
                 mSearchables.addAll(searchables);
@@ -127,7 +135,7 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
 
                 mAdapter.clear();
                 changeSearchText(suggestion);
-                mMessageHelper.setVisibility(View.GONE);
+                mPlaceHolderHelp.setVisibility(View.GONE);
                 mList.setVisibility(View.VISIBLE);
 
                 Log.d("tag", "onSuggestion: ");
@@ -144,13 +152,29 @@ public class SearchFragment extends Fragment implements ListSearchAdapter.OnSear
                 mAdapter.clear();
                 mAdapter.notifyDataSetChanged();
                 mViewModel.setQuery("");
-                mProgress.setVisibility(View.GONE);
-                mList.setVisibility(View.GONE);
-                mMessageHelper.setText(R.string.text_help);
-                mMessageHelper.setVisibility(View.VISIBLE);
+                showHelpSearch();
 
             }
         });
+    }
+
+
+    private void showHelpSearch(){
+        mProgress.setVisibility(View.GONE);
+        mList.setVisibility(View.GONE);
+        mMessageHelper.setText(R.string.text_help);
+        mImageHelp.setImageResource(R.drawable.ic_search_help);
+        mImageHelp.setColorFilter(mMessageHelper.getCurrentTextColor());
+        mPlaceHolderHelp.setVisibility(View.VISIBLE);
+    }
+
+    private void showNotFound(){
+        mProgress.setVisibility(View.GONE);
+        mList.setVisibility(View.GONE);
+        mMessageHelper.setText(getString(R.string.search_not_found));
+        mImageHelp.setImageResource(R.drawable.ic_search_not_found);
+        mImageHelp.setColorFilter(mMessageHelper.getCurrentTextColor());
+        mPlaceHolderHelp.setVisibility(View.VISIBLE);
     }
 
     private void changeSearchText(String s) {

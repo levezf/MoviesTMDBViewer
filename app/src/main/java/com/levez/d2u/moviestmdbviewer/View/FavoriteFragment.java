@@ -74,6 +74,10 @@ public class FavoriteFragment extends Fragment {
         mCategoryPeople.startRecyclerView(mPeopleAdapter);
         mCategoryTvSeries.startRecyclerView(mTvSeriesAdapter);
 
+        mCategoryMovies.disableShowMore(true);
+        mCategoryPeople.disableShowMore(true);
+        mCategoryTvSeries.disableShowMore(true);
+
         mMoviesAdapter.setClickListener((v, position) -> click(v, position, Constant.TAG_TYPE_MOVIE));
         mTvSeriesAdapter.setClickListener((v, position) -> click(v, position, Constant.TAG_TYPE_TV_SERIES));
         mPeopleAdapter.setClickListener((v, position) -> click(v, position, Constant.TAG_TYPE_PEOPLE));
@@ -84,7 +88,6 @@ public class FavoriteFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
 
         mFavoriteViewModel.getIdsFavorites(Constant.TAG_TYPE_MOVIE, getContext()).observe(this, integers -> {
 

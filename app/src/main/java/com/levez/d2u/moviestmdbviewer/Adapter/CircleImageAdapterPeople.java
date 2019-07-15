@@ -60,8 +60,10 @@ public class CircleImageAdapterPeople extends RecyclerView.Adapter<CircleImageAd
     }
 
     public void insertItem(HasProfilePath team) {
-        mTeam.add(team);
-        notifyItemInserted(getItemCount()-1);
+        if(!mTeam.contains(team)) {
+            mTeam.add(team);
+            notifyItemInserted(getItemCount() - 1);
+        }
     }
 
     public People getPeople(int position) {
